@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T19:02:03.129Z",
+  "timestamp": "2025-11-06T19:13:18.266Z",
   "projects": [
     {
       "id": "qatar",
@@ -102,7 +102,7 @@
           "content": "",
           "images": [
             {
-              "url": "indexeddb:mytaverse-history-6-0",
+              "url": "",
               "caption": "Option A was a traditional layout familiar from video conferencing solutions"
             }
           ]
@@ -112,7 +112,7 @@
           "content": "",
           "images": [
             {
-              "url": "indexeddb:mytaverse-history-7-0",
+              "url": "",
               "caption": "Option B was what we called a ‘bubble style’ layout with horizontal orientation on mobile."
             }
           ]
@@ -126,10 +126,10 @@
           "content": "Another initiative was the addition of a helpful bot that users could invoke at any time by speech or text. The bot ‘S.A.R.A’ (Sentient, Autonomous, Robot, Aid) would provide helpful instructions from the knowledge base with vocal answers using an AI generated voice.",
           "images": [
             {
-              "url": "indexeddb:mytaverse-history-9-0"
+              "url": ""
             },
             {
-              "url": "indexeddb:mytaverse-history-9-1"
+              "url": ""
             }
           ]
         }
@@ -168,7 +168,7 @@
           "content": "In the background there's the real-time stream of the realistic AI avatar that is combined with a web canvas on top of it. This web canvas can visualise information using pre-created web components like lists, topic, images with title and description, links and charts. They can be interactive as well enabling you to click on the topic you want to hear more about, or visit the link that was presented.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-1-0",
+              "url": "",
               "caption": "The architecture of the real-time streaming avatar"
             }
           ]
@@ -186,7 +186,7 @@
           "content": "",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-4-0",
+              "url": "",
               "caption": "Interactive information bubbles presented around the presenter"
             }
           ]
@@ -200,7 +200,7 @@
           "content": "",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-6-0",
+              "url": "",
               "caption": "List are visualised side-by-side. Notice how the AI presenter moved to the side (in real-time) to make room for the content."
             }
           ]
@@ -214,7 +214,7 @@
           "content": "This was a project that enabled users to create videos using AI. Users can prompt the LLM on what video to create or upload a document as the source material. They can also add interactive elements like quizzes and branching navigation.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-8-0",
+              "url": "",
               "caption": "The final outcome of the project enabling you to upload or prompt to create your ideal video"
             }
           ]
@@ -224,7 +224,7 @@
           "content": "The initial idea was to combine all of the different types of video creation into one interface. You could start by uploading a file, prompting the LLM, or by writing an exact script. After a round of user tests we realised that this kind of segmentation complicated things as users struggled to find the correct tab for their use case.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-9-0",
+              "url": "",
               "caption": "The initial prototype we tested"
             }
           ]
@@ -234,11 +234,11 @@
           "content": "Another part of the project was improving what comes after the user specified what kind of video they want to create. The next step in the user journey was choosing a template that would define the look of the video. For this part I reworked the template selector and introduced sorting options by identifying the most important characteristics users were looking by looking at our data metrics. After that there was a fairly long loading process, to make this step more engaging I created a tips & tricks slideshow that would surface useful hints in video format while the user was waiting. Here the tips shown were selected based on what brings the most user value towards our activation metric.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-10-0",
+              "url": "",
               "caption": "The reworked template chooser"
             },
             {
-              "url": "indexeddb:colossyan-history-10-1",
+              "url": "",
               "caption": "The loading screen in action"
             }
           ]
@@ -248,7 +248,7 @@
           "content": "I've also experimented with a more through rework for the video creation process where instead of templates users were able to define the visual look of the video by setting up different parameters such as the avatar presenting, fonts used and the color palette. The outcome of their choices would be visualised immediately on the right side, giving them a real-time preview. This project was unfortunately scope cut but hopefully will be implemented on a later date.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-11-0"
+              "url": ""
             }
           ]
         },
@@ -261,7 +261,7 @@
           "content": "This was a project that enabled you to style interactive components such as branching and quizzes to your liking. It was especially important to comply to brand guidelines so each customer could style them to match their own corporate look. Since our users are not designers I set out to simplify the styling process to the absolute maximum possible by coming up with automation rules that figure out the necessary details.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-13-0",
+              "url": "",
               "caption": "The final outcome of the project with just a few settings you can customise your interactive component."
             }
           ]
@@ -271,7 +271,7 @@
           "content": "When first starting the project I was under the (later turned out to be) false impression that users wanted to have detailed customization options. So I created an accordion style layout where users could click on any element on the canvas an set up its look in every possible way. Upon user testing this solution and user intel coming in from corporate clients we realised that we needed something much simpler as the only thing that mattered is to apply the brand kit and quickly if possible. Unfortunately this information only came at a later date but I learned a lot from this initial prototype. It made me realise how quickly this feature can get complicated and what parts should and could be automated.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-14-0",
+              "url": "",
               "caption": "The accordion style layout with detailed customization options."
             }
           ]
@@ -289,7 +289,7 @@
           "content": "A project to redesign the avatar library page on the home dashboard. The goal was to have easily hideable filtering options.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-17-0"
+              "url": ""
             }
           ]
         },
@@ -298,7 +298,7 @@
           "content": "This was a project to let users create an avatar based on themselves.",
           "images": [
             {
-              "url": "indexeddb:colossyan-history-18-0"
+              "url": ""
             }
           ]
         }
