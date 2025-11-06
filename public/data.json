@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T16:56:12.081Z",
+  "timestamp": "2025-11-06T17:21:26.965Z",
   "projects": [
     {
       "id": "qatar",
@@ -73,7 +73,7 @@
       "role": "Lead Product Designer",
       "history": [
         {
-          "phase": "Real-time Conversational Avatars with Interactive Visuals 2",
+          "phase": "Real-time Conversational Avatars with Interactive Visuals",
           "content": "At Colossyan I'm leading a new product initiative (greenlit after presenting my market research and product pitch to the CEO) that involves real-time lifelike AI avatars that can visualise information as they speak. Essentially real-time presentation generation. This new product gives a personal touch to the LLM as you no longer have to communicate with AI models via chat messages, there's a face now to the model and it can show information naturally just like a person would present it. This has the potential to disrupt fields like search, teaching, marketing and sales enablement and many more.",
           "image": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/2d407a87-fd66-4f36-bff7-b86a2034e9a8/Screenshot+2025-06-04+at+17.58.39.png"
         },
