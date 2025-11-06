@@ -20,52 +20,46 @@ export const loadDeployedData = async (): Promise<any> => {
 export const initializeDataFromDeployment = async (): Promise<void> => {
   if (typeof window === 'undefined') return;
 
-  // Check if we've already initialized from deployment
-  const initialized = localStorage.getItem('portfolio_data_initialized');
-  if (initialized) {
-    console.log('[initializeDataFromDeployment] Already initialized');
-    return;
-  }
-
   const deployedData = await loadDeployedData();
   if (!deployedData) {
-    console.log('[initializeDataFromDeployment] No deployed data, skipping initialization');
+    console.log('[initializeDataFromDeployment] No deployed data, using defaults');
     return;
   }
 
-  // Merge deployed data with localStorage
-  try {
-    // Projects
-    if (deployedData.projects && Object.keys(deployedData.projects).length > 0) {
-      const existingProjects = localStorage.getItem('portfolio_projects_data');
-      if (!existingProjects) {
-        console.log('[initializeDataFromDeployment] Initializing projects from deployment');
+  // Get the deployed data timestamp
+  const deployedTimestamp = deployedData.timestamp;
+  const lastSyncedTimestamp = localStorage.getItem('portfolio_last_synced_timestamp');
+
+  // If deployed data is newer than what we have, update localStorage
+  if (!lastSyncedTimestamp || deployedTimestamp > lastSyncedTimestamp) {
+    console.log('[initializeDataFromDeployment] Deployed data is newer, updating localStorage');
+    
+    try {
+      // Projects
+      if (deployedData.projects && Array.isArray(deployedData.projects) && deployedData.projects.length > 0) {
+        console.log('[initializeDataFromDeployment] Updating projects from deployment');
         localStorage.setItem('portfolio_projects_data', JSON.stringify(deployedData.projects));
       }
-    }
 
-    // About
-    if (deployedData.about && Object.keys(deployedData.about).length > 0) {
-      const existingAbout = localStorage.getItem('portfolio_about_data');
-      if (!existingAbout) {
-        console.log('[initializeDataFromDeployment] Initializing about from deployment');
+      // About
+      if (deployedData.about && Object.keys(deployedData.about).length > 0) {
+        console.log('[initializeDataFromDeployment] Updating about from deployment');
         localStorage.setItem('portfolio_about_data', JSON.stringify(deployedData.about));
       }
-    }
 
-    // Home
-    if (deployedData.home && Object.keys(deployedData.home).length > 0) {
-      const existingHome = localStorage.getItem('portfolio_home_data');
-      if (!existingHome) {
-        console.log('[initializeDataFromDeployment] Initializing home from deployment');
+      // Home
+      if (deployedData.home && Object.keys(deployedData.home).length > 0) {
+        console.log('[initializeDataFromDeployment] Updating home from deployment');
         localStorage.setItem('portfolio_home_data', JSON.stringify(deployedData.home));
       }
-    }
 
-    // Mark as initialized
-    localStorage.setItem('portfolio_data_initialized', 'true');
-    console.log('[initializeDataFromDeployment] ✅ Data initialization complete');
-  } catch (error) {
-    console.error('[initializeDataFromDeployment] Error initializing data:', error);
+      // Update the last synced timestamp
+      localStorage.setItem('portfolio_last_synced_timestamp', deployedTimestamp);
+      console.log('[initializeDataFromDeployment] ✅ Data updated from deployment');
+    } catch (error) {
+      console.error('[initializeDataFromDeployment] Error updating data:', error);
+    }
+  } else {
+    console.log('[initializeDataFromDeployment] Local data is up to date');
   }
 };
