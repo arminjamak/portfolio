@@ -220,8 +220,12 @@ export function ProjectDetail() {
           };
         } else if (block.type === "body") {
           if (currentPhase) {
-            // Add to existing phase
-            currentPhase.content = block.content || "";
+            // Add to existing phase - concatenate with existing content
+            if (currentPhase.content && block.content) {
+              currentPhase.content += "\n\n" + block.content;
+            } else if (block.content) {
+              currentPhase.content = block.content;
+            }
           } else {
             // Standalone body text without a heading - create a phase with empty title
             history.push({
