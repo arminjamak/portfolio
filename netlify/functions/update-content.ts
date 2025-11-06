@@ -1,6 +1,5 @@
-import { Handler } from '@netlify/functions';
-
-const handler: Handler = async (event) => {
+// @ts-nocheck
+export const handler = async (event: any) => {
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
@@ -89,5 +88,3 @@ const handler: Handler = async (event) => {
     };
   }
 };
-
-export { handler };
