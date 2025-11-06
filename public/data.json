@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T16:54:10.944Z",
+  "timestamp": "2025-11-06T16:54:23.189Z",
   "projects": [
     {
       "id": "qatar",
@@ -225,7 +225,7 @@
       "id": "joinme",
       "title": "Join.me",
       "category": "Video Conferencing",
-      "thumbnail": "https://framerusercontent.com/images/3TxWvpQMfLKqHPCKLfNmXEJGQk.png",
+      "thumbnail": "indexeddb:joinme-thumbnail",
       "images": [
         "https://framerusercontent.com/images/3TxWvpQMfLKqHPCKLfNmXEJGQk.png",
         "https://framerusercontent.com/images/7UxWvpQMfLKqHPCKLfNmXEJGQk.png",
