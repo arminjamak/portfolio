@@ -25,7 +25,7 @@ export const handler = async (event: any) => {
 
     // Get the current file SHA
     const getFileResponse = await fetch(
-      `https://api.github.com/repos/${githubRepo}/contents/website/src/data-export.json?ref=${githubBranch}`,
+      `https://api.github.com/repos/${githubRepo}/contents/public/data.json?ref=${githubBranch}`,
       {
         headers: {
           Authorization: `token ${githubToken}`,
@@ -42,7 +42,7 @@ export const handler = async (event: any) => {
 
     // Commit the updated content
     const commitResponse = await fetch(
-      `https://api.github.com/repos/${githubRepo}/contents/website/src/data-export.json`,
+      `https://api.github.com/repos/${githubRepo}/contents/public/data.json`,
       {
         method: 'PUT',
         headers: {
