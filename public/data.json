@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T17:27:46.049Z",
+  "timestamp": "2025-11-06T17:30:01.654Z",
   "projects": [
     {
       "id": "qatar",
@@ -243,6 +243,35 @@
       ]
     }
   ],
-  "about": {},
+  "about": {
+    "content": [
+      {
+        "id": "1",
+        "type": "h1",
+        "content": "Hi there!"
+      },
+      {
+        "id": "2",
+        "type": "body",
+        "content": "I’m a Budapest based Staff Product Designer previously at startups like Join.me & Prezi. Currently at Colossyan where I’m working on the future of video creation with AI avatars.\n"
+      },
+      {
+        "id": "3",
+        "type": "body",
+        "content": "I’m fascinated by complex, difficult problems that require an interdisciplinary approach. My goal is to help teams and organisations keep moving and improving day-to-day."
+      },
+      {
+        "id": "4",
+        "type": "body",
+        "content": "Apart from design, enjoy making music, travelling ✌️"
+      },
+      {
+        "id": "5",
+        "type": "body",
+        "content": "Feel free to DM me if you have any questions or thoughts!"
+      }
+    ],
+    "profileImage": "indexeddb:about-profile-image"
+  },
   "home": {}
 }
