@@ -108,7 +108,7 @@ export function ProjectDetail() {
           blocks.push({
             id: `phase-${index}-text`,
             type: "body",
-            content: phase.content,
+            content: phase.content || "",
           });
         } else if (phase.phase === "__IMAGE__") {
           // Standalone image block(s) without heading
@@ -127,12 +127,12 @@ export function ProjectDetail() {
           blocks.push({
             id: `phase-${index}-title`,
             type: "h1",
-            content: phase.phase,
+            content: phase.phase || "",
           });
           blocks.push({
             id: `phase-${index}-content`,
             type: "body",
-            content: phase.content,
+            content: phase.content || "",
           });
           if (phase.images) {
             phase.images.forEach((image: any, imageIndex: number) => {
@@ -215,23 +215,23 @@ export function ProjectDetail() {
           }
           // Start new phase
           currentPhase = {
-            phase: block.content,
+            phase: block.content || "",
             content: "",
           };
         } else if (block.type === "body") {
           if (currentPhase) {
             // Add to existing phase
-            currentPhase.content = block.content;
+            currentPhase.content = block.content || "";
           } else {
             // Standalone body text without a heading - create a phase with empty title
             history.push({
               phase: "__TEXT__",
-              content: block.content,
+              content: block.content || "",
             });
           }
         } else if (block.type === "image") {
           const newImage = {
-            url: block.content,
+            url: block.content || "",
             caption: block.caption,
           };
           if (currentPhase) {
@@ -651,7 +651,7 @@ export function ProjectDetail() {
                     <div key={block.id} className="space-y-2">
                       <div className="rounded-lg overflow-hidden border border-border">
                         <img
-                          src={block.content} // This is the image URL
+                          src={block.content}
                           alt={block.caption || "Project image"}
                           className="w-full h-auto"
                         />

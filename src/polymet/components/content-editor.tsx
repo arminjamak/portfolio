@@ -84,7 +84,10 @@ export function ContentEditor({
     setBlocks([...blocks, newBlock]);
   };
 
-  const insertBlockAt = (index: number, type: "body" | "image" | "divider" | "spacer") => {
+  const insertBlockAt = (
+    index: number,
+    type: "body" | "image" | "divider" | "spacer"
+  ) => {
     const newBlock: ContentBlock = {
       id: Date.now().toString(),
       type,
