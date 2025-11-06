@@ -1,5 +1,6 @@
 import { ContentBlock } from "@/polymet/components/content-editor";
 import { storageService, isDataUrl } from "@/polymet/data/storage-service";
+import { syncToGitHub, exportAllData } from './sync-service';
 
 export interface AboutData {
   content: ContentBlock[];
@@ -98,6 +99,15 @@ const saveAboutData = async (data: AboutData): Promise<void> => {
     console.log("[saveAboutData] ✅ Data saved to localStorage");
   } catch (error) {
     console.error("Error saving about data to localStorage:", error);
+  }
+
+  // Sync to GitHub in production
+  try {
+    const allData = exportAllData();
+    await syncToGitHub(allData, 'Update about data from admin panel');
+  } catch (error) {
+    console.error('Error syncing to GitHub:', error);
+    // Don't fail the save if GitHub sync fails
   }
 };
 

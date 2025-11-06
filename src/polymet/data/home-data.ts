@@ -1,3 +1,5 @@
+import { syncToGitHub, exportAllData } from './sync-service';
+
 // LocalStorage key
 const STORAGE_KEY = "portfolio_home_data";
 
@@ -27,13 +29,22 @@ const loadHomeData = (): HomeData => {
 };
 
 // Save home data to localStorage
-const saveHomeData = (data: HomeData): void => {
+const saveHomeData = async (data: HomeData): Promise<void> => {
   if (typeof window === "undefined") return;
 
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
     console.error("Error saving home data to localStorage:", error);
+  }
+
+  // Sync to GitHub in production
+  try {
+    const allData = exportAllData();
+    await syncToGitHub(allData, 'Update home data from admin panel');
+  } catch (error) {
+    console.error('Error syncing to GitHub:', error);
+    // Don't fail the save if GitHub sync fails
   }
 };
 
@@ -45,9 +56,9 @@ export const getHomeData = (): HomeData => {
   return homeData;
 };
 
-export const updateHomeData = (updates: Partial<HomeData>): void => {
+export const updateHomeData = async (updates: Partial<HomeData>): Promise<void> => {
   homeData = { ...homeData, ...updates };
-  saveHomeData(homeData);
+  await saveHomeData(homeData);
 };
 
 // Reset to default data (useful for testing)

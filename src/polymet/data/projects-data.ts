@@ -1,3 +1,5 @@
+import { syncToGitHub, exportAllData } from './sync-service';
+
 export interface Project {
   id: string;
   title: string;
@@ -585,6 +587,15 @@ const saveProjects = async (projects: Project[]): Promise<void> => {
     } else {
       console.error("Error saving projects:", error);
     }
+  }
+
+  // Sync to GitHub in production
+  try {
+    const allData = exportAllData();
+    await syncToGitHub(allData, 'Update projects data from admin panel');
+  } catch (error) {
+    console.error('Error syncing to GitHub:', error);
+    // Don't fail the save if GitHub sync fails
   }
 };
 

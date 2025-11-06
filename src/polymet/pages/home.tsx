@@ -76,8 +76,8 @@ export function Home() {
     }
   };
 
-  const handleSaveHeader = () => {
-    updateHomeData(headerData);
+  const handleSaveHeader = async () => {
+    await updateHomeData(headerData);
     setIsEditingHeader(false);
   };
 
