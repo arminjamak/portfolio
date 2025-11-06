@@ -654,7 +654,7 @@ export function ProjectDetail() {
                         />
                       </div>
                       {block.caption && (
-                        <p className="text-sm text-muted-foreground text-center">
+                        <p className="text-sm text-muted-foreground text-left">
                           {block.caption}
                         </p>
                       )}
