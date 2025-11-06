@@ -12,6 +12,13 @@ interface PortfolioLayoutProps {
 export function PortfolioLayout({ children }: PortfolioLayoutProps) {
   const { isAdmin, logout } = useAdmin();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleLogout = async () => {
+    setIsSyncing(true);
+    await logout();
+    setIsSyncing(false);
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
@@ -52,10 +59,11 @@ export function PortfolioLayout({ children }: PortfolioLayoutProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={logout}
-                  className="text-sm h-auto p-0 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                  onClick={handleLogout}
+                  disabled={isSyncing}
+                  className="text-sm h-auto p-0 text-muted-foreground hover:text-foreground hover:bg-transparent disabled:opacity-50"
                 >
-                  Log out
+                  {isSyncing ? "Syncing..." : "Log out"}
                 </Button>
               ) : (
                 <Button

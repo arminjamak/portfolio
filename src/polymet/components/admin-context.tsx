@@ -5,6 +5,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { syncToGitHub, exportAllData } from "@/polymet/data/sync-service";
 
 interface AdminContextType {
   isAdmin: boolean;
@@ -38,7 +39,21 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     return false;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    // Sync all data to GitHub before logging out
+    try {
+      console.log('[Admin Logout] Syncing data to GitHub...');
+      const allData = exportAllData();
+      const success = await syncToGitHub(allData, 'Update content from admin session');
+      if (success) {
+        console.log('[Admin Logout] ✅ Data synced successfully!');
+      } else {
+        console.error('[Admin Logout] ⚠️ Failed to sync data');
+      }
+    } catch (error) {
+      console.error('[Admin Logout] Error syncing data:', error);
+    }
+    
     setIsAdmin(false);
     localStorage.removeItem(ADMIN_STORAGE_KEY);
   };

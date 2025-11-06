@@ -1,5 +1,3 @@
-import { syncToGitHub, exportAllData } from './sync-service';
-
 // LocalStorage key
 const STORAGE_KEY = "portfolio_home_data";
 
@@ -38,14 +36,7 @@ const saveHomeData = async (data: HomeData): Promise<void> => {
     console.error("Error saving home data to localStorage:", error);
   }
 
-  // Sync to GitHub in production
-  try {
-    const allData = exportAllData();
-    await syncToGitHub(allData, 'Update home data from admin panel');
-  } catch (error) {
-    console.error('Error syncing to GitHub:', error);
-    // Don't fail the save if GitHub sync fails
-  }
+  // Note: GitHub sync now happens only on admin logout to reduce build frequency
 };
 
 // Initialize home data

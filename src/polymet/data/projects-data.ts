@@ -1,5 +1,3 @@
-import { syncToGitHub, exportAllData } from './sync-service';
-
 export interface Project {
   id: string;
   title: string;
@@ -589,14 +587,7 @@ const saveProjects = async (projects: Project[]): Promise<void> => {
     }
   }
 
-  // Sync to GitHub in production
-  try {
-    const allData = exportAllData();
-    await syncToGitHub(allData, 'Update projects data from admin panel');
-  } catch (error) {
-    console.error('Error syncing to GitHub:', error);
-    // Don't fail the save if GitHub sync fails
-  }
+  // Note: GitHub sync now happens only on admin logout to reduce build frequency
 };
 
 // Initialize projects data
