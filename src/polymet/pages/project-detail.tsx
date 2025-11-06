@@ -110,13 +110,17 @@ export function ProjectDetail() {
             content: phase.content,
           });
         } else if (phase.phase === "__IMAGE__") {
-          // Standalone image block without heading
-          blocks.push({
-            id: `phase-${index}-image`,
-            type: "image",
-            content: phase.image,
-            caption: phase.caption,
-          });
+          // Standalone image block(s) without heading
+          if (phase.images) {
+            phase.images.forEach((image: any, imageIndex: number) => {
+              blocks.push({
+                id: `phase-${index}-image-${imageIndex}`,
+                type: "image",
+                content: image.url,
+                caption: image.caption,
+              });
+            });
+          }
         } else {
           // Regular phase with title and content
           blocks.push({
@@ -129,12 +133,14 @@ export function ProjectDetail() {
             type: "body",
             content: phase.content,
           });
-          if (phase.image) {
-            blocks.push({
-              id: `phase-${index}-image`,
-              type: "image",
-              content: phase.image,
-              caption: phase.caption,
+          if (phase.images) {
+            phase.images.forEach((image: any, imageIndex: number) => {
+              blocks.push({
+                id: `phase-${index}-image-${imageIndex}`,
+                type: "image",
+                content: image.url,
+                caption: image.caption,
+              });
             });
           }
         }
@@ -186,12 +192,11 @@ export function ProjectDetail() {
 
     try {
       // Convert content blocks back to history format
-      const history: { phase: string; content: string; image?: string; caption?: string }[] = [];
+      const history: { phase: string; content: string; images?: { url: string; caption?: string }[] }[] = [];
       let currentPhase: {
         phase: string;
         content: string;
-        image?: string;
-        caption?: string;
+        images?: { url: string; caption?: string }[];
       } | null = null;
 
       newContent.forEach((block, index) => {
@@ -224,19 +229,22 @@ export function ProjectDetail() {
             });
           }
         } else if (block.type === "image") {
+          const newImage = {
+            url: block.content,
+            caption: block.caption,
+          };
           if (currentPhase) {
             // Add to existing phase
-            currentPhase.image = block.content;
-            if (block.caption) {
-              currentPhase.caption = block.caption;
+            if (!currentPhase.images) {
+              currentPhase.images = [];
             }
+            currentPhase.images.push(newImage);
           } else {
-            // Standalone image without a heading
+            // Standalone image without a heading, create a new phase for it
             history.push({
               phase: "__IMAGE__",
               content: "",
-              image: block.content,
-              caption: block.caption,
+              images: [newImage],
             });
           }
         } else if (block.type === "divider" || block.type === "spacer") {
@@ -640,13 +648,13 @@ export function ProjectDetail() {
                     <div key={block.id} className="space-y-2">
                       <div className="rounded-lg overflow-hidden border border-border">
                         <img
-                          src={block.content}
-                          alt="Project content"
+                          src={block.content} // This is the image URL
+                          alt={block.caption || "Project image"}
                           className="w-full h-auto"
                         />
                       </div>
                       {block.caption && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground text-center">
                           {block.caption}
                         </p>
                       )}
