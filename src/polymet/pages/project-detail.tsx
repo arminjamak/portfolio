@@ -673,7 +673,7 @@ export function ProjectDetail() {
                 return (
                   <p
                     key={block.id}
-                    className="text-muted-foreground leading-relaxed max-w-4xl"
+                    className="text-muted-foreground leading-relaxed max-w-4xl whitespace-pre-line"
                     style={
                       isParagraphAfterHeading
                         ? { marginTop: "24px" }
