@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { AnimatedLogo } from "@/polymet/components/animated-logo";
 import { ArrowLeftIcon, EditIcon, SaveIcon, XIcon } from "lucide-react";
 import { useAdmin } from "@/polymet/components/admin-context";
 import {
@@ -383,9 +384,11 @@ export function ProjectDetail() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold">Loading project...</h1>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex items-center justify-center" style={{ minHeight: 'calc(100vh - 200px)' }}>
+        <div className="text-center">
+          <div style={{ transform: 'scale(2)' }}>
+            <AnimatedLogo />
+          </div>
         </div>
       </div>
     );
