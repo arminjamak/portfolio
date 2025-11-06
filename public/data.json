@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T17:21:26.965Z",
+  "timestamp": "2025-11-06T17:36:20.178Z",
   "projects": [
     {
       "id": "qatar",
@@ -12,18 +12,21 @@
         "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/d41d49a8-3e8a-423e-ad62-856f50d0615d/light+version+gif.gif?format=2500w",
         "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/81293208-0aad-493b-9c91-ef2dddf15119/qatarphone.webp?format=2500w"
       ],
-      "description": "Introduced real-time streaming AI avatars that visualize information as they speak. As you're conversing with the agent, it presents information and options as floating components, allowing you to guide the conversation by clicking on elements. You can also follow up with a chat message or via voice. The goal is to replace traditional chat-based LLM information architecture with something more visual, similar to a presentation generated in real-time.",
-      "year": "2024",
+      "description": "A project to introduce real-time AI agent to manage bookings, select seat and much more.",
+      "year": "2025",
       "client": "Qatar Airways",
       "role": "Lead Product Designer",
       "history": [
         {
           "phase": "Real-time AI Agents",
-          "content": "Introduced real-time streaming AI avatars that also visualise information as they speak. As you're conversing with the agent it present information / options as floating components, allowing you to guide the conversation by clicking on elements. You can also follow up with a chat message or via voice. The goal is to replace traditional chat based LLM information architecture with something more visual similar to a presentation generated in real-time. This project was an accumulation of my research on real-time streaming avatars."
+          "content": "Introduced real-time streaming AI avatars that also visualise information as they speak. As you're conversing with the agent it present information / options as floating components, allowing you to guide the conversation by clicking on elements. You can also follow up with a chat message or via voice. The goal is to replace traditional chat based LLM information architecture with something more visual similar to a presentation generated in real-time. This project was an accumulation of my research on real-time streaming avatars.",
+          "image": "indexeddb:qatar-history-0",
+          "caption": "Desktop interface with real-time streaming avatar"
         },
         {
           "phase": "Mobile Experience",
-          "content": "On mobile, apart from the real-time agent you're also presented with quick-start options allowing you to book a flight, select a seat or configure your on-board meal preferences. You can also use this interface during flight via the on-flight Wifi."
+          "content": "On mobile, apart from the real-time agent you're also presented with quick-start options allowing you to book a flight, select a seat or configure your on-board meal preferences. You can also use this interface during flight via the on-flight Wifi.",
+          "image": "indexeddb:qatar-history-1"
         }
       ]
     },
@@ -243,6 +246,38 @@
       ]
     }
   ],
-  "about": {},
-  "home": {}
+  "about": {
+    "content": [
+      {
+        "id": "1",
+        "type": "h1",
+        "content": "Hi there!"
+      },
+      {
+        "id": "2",
+        "type": "body",
+        "content": "I’m a Budapest based Staff Product Designer previously at startups like Join.me & Prezi. Currently at Colossyan where I’m working on the future of video creation with AI avatars.\n"
+      },
+      {
+        "id": "3",
+        "type": "body",
+        "content": "I’m fascinated by complex, difficult problems that require an interdisciplinary approach. My goal is to help teams and organisations keep moving and improving day-to-day."
+      },
+      {
+        "id": "4",
+        "type": "body",
+        "content": "Apart from design, enjoy making music, travelling ✌️"
+      },
+      {
+        "id": "5",
+        "type": "body",
+        "content": "Feel free to DM me if you have any questions or thoughts!"
+      }
+    ],
+    "profileImage": "indexeddb:about-profile-image"
+  },
+  "home": {
+    "title": "Lead Product Designer",
+    "subtitle": "Focusing on generative and conversational AI and other emerging technologies."
+  }
 }
