@@ -219,15 +219,17 @@ export function ProjectDetail() {
             content: "",
           };
         } else if (block.type === "body") {
-          if (currentPhase) {
-            // Add to existing phase - concatenate with existing content
-            if (currentPhase.content && block.content) {
-              currentPhase.content += "\n\n" + block.content;
-            } else if (block.content) {
-              currentPhase.content = block.content;
-            }
+          if (currentPhase && !currentPhase.content) {
+            // First body block after a heading - add to the current phase
+            currentPhase.content = block.content || "";
           } else {
-            // Standalone body text without a heading - create a phase with empty title
+            // Either no current phase or current phase already has content
+            // Save current phase if it exists
+            if (currentPhase) {
+              history.push(currentPhase);
+              currentPhase = null;
+            }
+            // Create a standalone text phase
             history.push({
               phase: "__TEXT__",
               content: block.content || "",
