@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T16:45:00.683Z",
+  "timestamp": "2025-11-06T16:45:19.028Z",
   "projects": [
     {
       "id": "qatar",
@@ -160,9 +160,9 @@
     },
     {
       "id": "piktochart",
-      "title": "Piktochart (Piktostory)",
+      "title": "Piktochart",
       "category": "AI Video Editor",
-      "thumbnail": "https://framerusercontent.com/images/3TxWvpQMfLKqHPCKLfNmXEJGQk.png",
+      "thumbnail": "indexeddb:piktochart-thumbnail",
       "images": [
         "https://framerusercontent.com/images/3TxWvpQMfLKqHPCKLfNmXEJGQk.png",
         "https://framerusercontent.com/images/7UxWvpQMfLKqHPCKLfNmXEJGQk.png",
