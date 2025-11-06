@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T17:36:20.178Z",
+  "timestamp": "2025-11-06T17:57:57.521Z",
   "projects": [
     {
       "id": "qatar",
@@ -20,13 +20,24 @@
         {
           "phase": "Real-time AI Agents",
           "content": "Introduced real-time streaming AI avatars that also visualise information as they speak. As you're conversing with the agent it present information / options as floating components, allowing you to guide the conversation by clicking on elements. You can also follow up with a chat message or via voice. The goal is to replace traditional chat based LLM information architecture with something more visual similar to a presentation generated in real-time. This project was an accumulation of my research on real-time streaming avatars.",
-          "image": "indexeddb:qatar-history-0",
-          "caption": "Desktop interface with real-time streaming avatar"
+          "images": [
+            {
+              "url": "indexeddb:qatar-history-0-0",
+              "caption": "The desktop version with the real-time streaming avatar"
+            }
+          ]
         },
         {
           "phase": "Mobile Experience",
           "content": "On mobile, apart from the real-time agent you're also presented with quick-start options allowing you to book a flight, select a seat or configure your on-board meal preferences. You can also use this interface during flight via the on-flight Wifi.",
-          "image": "indexeddb:qatar-history-1"
+          "images": [
+            {
+              "url": "indexeddb:qatar-history-1-0"
+            },
+            {
+              "url": "indexeddb:qatar-history-1-1"
+            }
+          ]
         }
       ]
     },
