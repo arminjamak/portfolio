@@ -385,6 +385,9 @@ const loadProjects = async (): Promise<Project[]> => {
             console.warn(
               `[loadProjects] ⚠️ Thumbnail not found in IndexedDB: ${imageId}`
             );
+            // Remove broken IndexedDB reference
+            console.log(`[loadProjects] Removing broken thumbnail IndexedDB reference: ${imageId}`);
+            project.thumbnail = "";
           }
         }
 
@@ -395,6 +398,11 @@ const loadProjects = async (): Promise<Project[]> => {
             const dataUrl = await storageService.getImage(imageId);
             if (dataUrl) {
               project.images[i] = dataUrl;
+            } else {
+              console.warn(`[loadProjects] ⚠️ Image not found in IndexedDB: ${imageId}`);
+              // Remove broken IndexedDB reference
+              console.log(`[loadProjects] Removing broken image IndexedDB reference: ${imageId}`);
+              project.images[i] = "";
             }
           }
         }
@@ -413,6 +421,9 @@ const loadProjects = async (): Promise<Project[]> => {
                   project.history[j].images![k].url = dataUrl;
                 } else {
                   console.warn(`[loadProjects] ⚠️ History image not found in IndexedDB: ${imageId}`);
+                  // Remove broken IndexedDB reference
+                  console.log(`[loadProjects] Removing broken IndexedDB reference: ${imageId}`);
+                  project.history[j].images![k].url = "";
                 }
               }
             }
@@ -421,6 +432,15 @@ const loadProjects = async (): Promise<Project[]> => {
       }
 
       console.log(`[loadProjects] ✅ Loaded ${projects.length} projects`);
+      
+      // Save cleaned data back to localStorage to persist the cleanup
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        console.log(`[loadProjects] ✅ Cleaned data saved back to localStorage`);
+      } catch (error) {
+        console.error(`[loadProjects] Error saving cleaned data:`, error);
+      }
+      
       return projects;
     } else {
       console.log("[loadProjects] ⚠️ localStorage is empty!");

@@ -653,29 +653,19 @@ export function ProjectDetail() {
                   );
                 }
                 if (block.type === "image") {
+                  // Skip image blocks with empty or broken content
+                  if (!block.content || !block.content.trim() || block.content.startsWith("indexeddb:")) {
+                    return null;
+                  }
+                  
                   return (
                     <div key={block.id} className="space-y-2">
                       <div className="rounded-lg overflow-hidden border border-border">
-                        {block.content && !block.content.startsWith("indexeddb:") ? (
-                          <img
-                            src={block.content}
-                            alt={block.caption || "Project image"}
-                            className="w-full h-auto"
-                          />
-                        ) : block.content?.startsWith("indexeddb:") ? (
-                          <div className="w-full h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                            <div className="text-center text-gray-500">
-                              <p className="text-sm">Image not available</p>
-                              <p className="text-xs mt-1">IndexedDB reference: {block.content.replace("indexeddb:", "")}</p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                            <div className="text-center text-gray-500">
-                              <p className="text-sm">No image URL</p>
-                            </div>
-                          </div>
-                        )}
+                        <img
+                          src={block.content}
+                          alt={block.caption || "Project image"}
+                          className="w-full h-auto"
+                        />
                       </div>
                       {block.caption && (
                         <p className="text-sm text-muted-foreground text-left">
