@@ -406,9 +406,13 @@ const loadProjects = async (): Promise<Project[]> => {
               const image = project.history[j].images![k];
               if (image.url && image.url.startsWith("indexeddb:")) {
                 const imageId = image.url.replace("indexeddb:", "");
+                console.log(`[loadProjects] Loading history image from IndexedDB: ${imageId}`);
                 const dataUrl = await storageService.getImage(imageId);
                 if (dataUrl) {
+                  console.log(`[loadProjects] ✅ History image loaded: ${imageId} (${(dataUrl.length / 1024).toFixed(1)}KB)`);
                   project.history[j].images![k].url = dataUrl;
+                } else {
+                  console.warn(`[loadProjects] ⚠️ History image not found in IndexedDB: ${imageId}`);
                 }
               }
             }
