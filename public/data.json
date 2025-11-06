@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-06T17:57:57.521Z",
+  "timestamp": "2025-11-06T18:04:55.402Z",
   "projects": [
     {
       "id": "qatar",
@@ -57,8 +57,45 @@
       "role": "Lead Product Designer",
       "history": [
         {
-          "phase": "Platform Redesign",
-          "content": "Led the complete redesign of Mytaverse's B2B metaverse platform, focusing on improving the virtual event experience and collaboration tools for enterprise clients."
+          "phase": "Getting Started",
+          "content": "To decide on the viable option 6 users were interviewed and tested on prototypes, 3 on option A and 3 on option B. Since users were having issues with the transparent bar obscuring the view and they preferred the horizontal layout we decided to continue with the ‘bubble style’ version.",
+          "images": [
+            {
+              "url": "indexeddb:mytaverse-history-0-0",
+              "caption": "Different use cases for the enterprise metaverse"
+            },
+            {
+              "url": "indexeddb:mytaverse-history-0-1"
+            },
+            {
+              "url": "indexeddb:mytaverse-history-0-2",
+              "caption": "Sketches from the design sprint diverge stage on different layouts"
+            },
+            {
+              "url": "indexeddb:mytaverse-history-0-3",
+              "caption": "Option A was a traditional layout familiar from video conferencing solutions"
+            },
+            {
+              "url": "indexeddb:mytaverse-history-0-4",
+              "caption": "Option B was what we called a ‘bubble style’ layout with horizontal orientation on mobile."
+            }
+          ]
+        },
+        {
+          "phase": "__DIVIDER__",
+          "content": ""
+        },
+        {
+          "phase": "Onboarding",
+          "content": "Another initiative was the addition of a helpful bot that users could invoke at any time by speech or text. The bot ‘S.A.R.A’ (Sentient, Autonomous, Robot, Aid) would provide helpful instructions from the knowledge base with vocal answers using an AI generated voice.",
+          "images": [
+            {
+              "url": "indexeddb:mytaverse-history-2-0"
+            },
+            {
+              "url": "indexeddb:mytaverse-history-2-1"
+            }
+          ]
         }
       ]
     },
