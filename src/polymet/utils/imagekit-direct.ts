@@ -16,16 +16,16 @@ export async function uploadToImageKitDirect(
   const fileSizeMB = file.size / 1024 / 1024;
   console.log(`[ImageKit Direct] Starting upload for ${imageId}, size: ${fileSizeMB.toFixed(2)}MB`);
   
-  // Check file size limit - increased for better user experience
-  if (fileSizeMB > 20) {
-    console.warn(`[ImageKit Direct] File too large: ${fileSizeMB.toFixed(2)}MB (max: 20MB)`);
+  // Check file size limit - realistic limit based on Netlify Function constraints
+  if (fileSizeMB > 8) {
+    console.warn(`[ImageKit Direct] File too large: ${fileSizeMB.toFixed(2)}MB (max: 8MB)`);
     return {
       success: false,
       imageId,
       originalUrl: '',
       resizedUrl: '',
       url: '',
-      error: `File too large: ${fileSizeMB.toFixed(2)}MB. Please compress to under 20MB first.`
+      error: `File too large: ${fileSizeMB.toFixed(2)}MB. Please compress to under 8MB for reliable upload. ImageKit will optimize it further.`
     };
   }
   

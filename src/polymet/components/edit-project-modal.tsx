@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Project } from "@/polymet/data/projects-data";
 import { SaveIcon, TrashIcon, UploadIcon, LoaderIcon } from "lucide-react";
 import { uploadToImageKitDirect } from "@/polymet/utils/imagekit-direct";
-import { uploadToImageKitClient } from "@/polymet/utils/imagekit-client-upload";
+import { uploadLargeFileToImageKit } from "@/polymet/utils/imagekit-large-file";
 
 interface EditProjectModalProps {
   open: boolean;
@@ -83,33 +83,17 @@ export function EditProjectModal({
       const fileSizeMB = file.size / 1024 / 1024;
       console.log(`[EditProjectModal] Uploading ${imageId} to ImageKit (${fileSizeMB.toFixed(2)}MB)...`);
       
-      // For now, use backend upload for all files but with higher size limit
-      // TODO: Fix client-side signature authentication later
-      console.log(`[EditProjectModal] Using backend upload for ${fileSizeMB.toFixed(2)}MB file`);
-      
-      if (fileSizeMB > 20) {
-        // Show error for extremely large files
-        const result = {
-          success: false,
-          imageId,
-          originalUrl: '',
-          resizedUrl: '',
-          url: '',
-          error: `File too large: ${fileSizeMB.toFixed(2)}MB. Please compress to under 20MB.`
-        };
-        
-        console.warn(`[EditProjectModal] File too large: ${result.error}`);
-        // Fallback to base64 for display
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setThumbnail(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-        setIsUploading(false);
-        return;
+      // Choose upload method based on file size
+      let result;
+      if (fileSizeMB > 8) {
+        // Use large file upload (no base64 conversion, supports up to 25MB)
+        console.log(`[EditProjectModal] Using large file upload for ${fileSizeMB.toFixed(2)}MB file`);
+        result = await uploadLargeFileToImageKit(file, imageId);
+      } else {
+        // Use standard backend upload for small files
+        console.log(`[EditProjectModal] Using standard upload for ${fileSizeMB.toFixed(2)}MB file`);
+        result = await uploadToImageKitDirect(file, imageId);
       }
-      
-      const result = await uploadToImageKitDirect(file, imageId);
       
       if (result.success && result.url) {
         console.log(`[EditProjectModal] ✅ Direct upload successful: ${result.resizedUrl}`);
