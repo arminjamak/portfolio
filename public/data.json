@@ -1,292 +1,66 @@
 {
-  "timestamp": "2025-11-11T11:52:10.734Z",
-  "projects": [
-    {
-      "id": "qatar",
-      "title": "Qatar Airways",
-      "category": "AI & Aviation",
-      "thumbnail": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/fcd92120-ce79-4407-9176-3cf0b7fb5de2/phone_animation_compressed-ezgif.com-optimize.gif?format=2500w",
-      "images": [
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/fcd92120-ce79-4407-9176-3cf0b7fb5de2/phone_animation_compressed-ezgif.com-optimize.gif?format=2500w",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/1b8df5a0-d737-45c7-966f-5870b0d4a085/topicbubblesgif-ezgif.com-optimize.gif?format=2500w",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/d41d49a8-3e8a-423e-ad62-856f50d0615d/light+version+gif.gif?format=2500w",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/81293208-0aad-493b-9c91-ef2dddf15119/qatarphone.webp?format=2500w"
+  "timestamp": "2025-11-11T19:02:54.874Z",
+  "projects": [],
+  "about": {
+    "content": [
+      {
+        "id": "1",
+        "type": "h1",
+        "content": "About Me"
+      },
+      {
+        "id": "2",
+        "type": "body",
+        "content": "Product Designer based in San Francisco"
+      },
+      {
+        "id": "3",
+        "type": "body",
+        "content": "I'm Armin Jamak, a product designer with over 8 years of experience creating digital products that people love to use. My approach combines strategic thinking with meticulous attention to detail, always keeping the user at the center of every decision."
+      },
+      {
+        "id": "4",
+        "type": "body",
+        "content": "Throughout my career, I've had the privilege of working with startups and established companies across various industries—from fintech and healthcare to education and e-commerce. I believe great design is invisible; it solves problems so elegantly that users don't have to think about it."
+      },
+      {
+        "id": "5",
+        "type": "body",
+        "content": "My design process is rooted in research and iteration. I start by deeply understanding the problem space through user interviews, data analysis, and competitive research. Then I explore multiple solutions through sketching and prototyping, testing early and often to validate assumptions and refine the experience."
+      },
+      {
+        "id": "6",
+        "type": "body",
+        "content": "When I'm not designing, you can find me exploring the city's coffee shops, reading about psychology and behavioral economics, or experimenting with generative art and creative coding."
+      }
+    ],
+    "profileImage": "https://ik.imagekit.io/bvord1udre/tr:w-1200,q-85,f-auto/portfolio/about-profile-image-1762887700970-vhs1jh6w7",
+    "skills": {
+      "design": [
+        "User Research",
+        "Information Architecture",
+        "Interaction Design",
+        "Visual Design",
+        "Prototyping",
+        "Design Systems"
       ],
-      "description": "Introduced real-time streaming AI avatars that visualize information as they speak. As you're conversing with the agent, it presents information and options as floating components, allowing you to guide the conversation by clicking on elements. You can also follow up with a chat message or via voice. The goal is to replace traditional chat-based LLM information architecture with something more visual, similar to a presentation generated in real-time.",
-      "year": "2024",
-      "client": "Qatar Airways",
-      "role": "Lead Product Designer",
-      "history": [
-        {
-          "phase": "Real-time AI Agents",
-          "content": "Introduced real-time streaming AI avatars that also visualise information as they speak. As you're conversing with the agent it present information / options as floating components, allowing you to guide the conversation by clicking on elements. You can also follow up with a chat message or via voice. The goal is to replace traditional chat based LLM information architecture with something more visual similar to a presentation generated in real-time. This project was an accumulation of my research on real-time streaming avatars."
-        },
-        {
-          "phase": "Mobile Experience",
-          "content": "On mobile, apart from the real-time agent you're also presented with quick-start options allowing you to book a flight, select a seat or configure your on-board meal preferences. You can also use this interface during flight via the on-flight Wifi."
-        }
-      ]
-    },
-    {
-      "id": "mytaverse",
-      "title": "Mytaverse",
-      "category": "B2B Metaverse Platform",
-      "thumbnail": "indexeddb:mytaverse-thumbnail",
-      "images": [
-        "https://framerusercontent.com/images/kDxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/9LxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/2MxWvpQMfLKqHPCKLfNmXEJGQk.png"
+      "tools": [
+        "Figma",
+        "Adobe Creative Suite",
+        "Sketch",
+        "Principle",
+        "Framer",
+        "Miro"
       ],
-      "description": "Complete redesign of a B2B metaverse platform for virtual events and collaboration.",
-      "year": "2024",
-      "client": "Mytaverse",
-      "role": "Lead Product Designer",
-      "history": [
-        {
-          "phase": "Platform Redesign",
-          "content": "Led the complete redesign of Mytaverse's B2B metaverse platform, focusing on improving the virtual event experience and collaboration tools for enterprise clients."
-        }
-      ]
-    },
-    {
-      "id": "colossyan",
-      "title": "Colossyan",
-      "category": "AI Avatar Editor",
-      "thumbnail": "https://armin.work/.netlify/functions/get-image?id=project-thumbnail-colossyan-1762861688527-pvadcrmz4",
-      "images": [
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/2d407a87-fd66-4f36-bff7-b86a2034e9a8/Screenshot+2025-06-04+at+17.58.39.png",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/196de747-43e2-4405-8467-a373091ad634/bubblesgif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/79fffa27-b027-4950-ac84-2c82f39331bc/presentercolossyangif-ezgif.com-optimize.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/3508efae-ad10-402a-bfd8-2a71cc34a506/doc2videogif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/fc7e9bae-b9d0-4fdb-b5d0-4a3fd0ea622e/instantvideogif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/a83695f3-9b96-409f-b8ce-bff0301c4e27/templatechoosergif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/9055b258-3fc6-4592-be9d-e34fea9e1e00/loadinggif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/7ee3c2f5-6cb3-4176-a969-5e2b7affc51b/experiments.png",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/1ddd3d4a-a8f6-4237-b3f0-87c29585ee31/colossyanfinalgif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/60003509-c7fb-4f90-a780-c0c56bb5cff6/colossyangif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/a0fb7cc6-0dc4-4190-a836-98e405885e6c/colossyanavatarspagegif.gif",
-        "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/cb12a5c5-ed87-42c6-809a-f4b299ce8b2f/croppinggif.gif"
-      ],
-      "description": "An AI avatar editor allowing you to create interactive experiences",
-      "year": "2024",
-      "client": "Colossyan",
-      "role": "Lead Product Designer",
-      "history": [
-        {
-          "phase": "Real-time Conversational Avatars with Interactive Visuals",
-          "content": "At Colossyan I'm leading a new product initiative (greenlit after presenting my market research and product pitch to the CEO) that involves real-time lifelike AI avatars that can visualise information as they speak. Essentially real-time presentation generation. This new product gives a personal touch to the LLM as you no longer have to communicate with AI models via chat messages, there's a face now to the model and it can show information naturally just like a person would present it. This has the potential to disrupt fields like search, teaching, marketing and sales enablement and many more.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/2d407a87-fd66-4f36-bff7-b86a2034e9a8/Screenshot+2025-06-04+at+17.58.39.png"
-            }
-          ]
-        },
-        {
-          "phase": "How it works",
-          "content": "In the background there's the real-time stream of the realistic AI avatar that is combined with a web canvas on top of it. This web canvas can visualise information using pre-created web components like lists, topic, images with title and description, links and charts. They can be interactive as well enabling you to click on the topic you want to hear more about, or visit the link that was presented."
-        },
-        {
-          "phase": "Process",
-          "content": "Apart from coming up with the initial product pitch the most exciting part of the project was understanding how information is visualised when there's a 'human' presenter involved. Topics for example are presented around the presenter in circular bubbles where bubbles can also go partially behind the presenter (without obstructing or hiding information) emphasising that they are situated in space. They can also be clicked allowing you to advance the conversation and have wobble physics so they gently move as you move your cursor over them. This makes information a living and interactive part of the whole experience.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/196de747-43e2-4405-8467-a373091ad634/bubblesgif.gif"
-            }
-          ]
-        },
-        {
-          "phase": "Interactive Information Bubbles",
-          "content": "Interactive information bubbles are presented around the presenter. List are visualised side-by-side and notice how the presenter moves to the side (in real-time) to make room for the content. The contents of the list items (title, description and image) and the presenter's speech is generated by an AI model (LLM) in real-time.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/79fffa27-b027-4950-ac84-2c82f39331bc/presentercolossyangif-ezgif.com-optimize.gif"
-            }
-          ]
-        },
-        {
-          "phase": "AI Video Creator",
-          "content": "This was a project that enabled users to create videos using AI. Users can prompt the LLM on what video to create or upload a document as the source material. They can also add interactive elements like quizzes and branching navigation.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/3508efae-ad10-402a-bfd8-2a71cc34a506/doc2videogif.gif"
-            }
-          ]
-        },
-        {
-          "phase": "First Iteration",
-          "content": "The initial idea was to combine all of the different types of video creation into one interface. You could start by uploading a file, prompting the LLM, or by writing an exact script. After a round of user tests we realised that this kind of segmentation complicated things as users struggled to find the correct tab for their use case.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/fc7e9bae-b9d0-4fdb-b5d0-4a3fd0ea622e/instantvideogif.gif"
-            }
-          ]
-        },
-        {
-          "phase": "Template Chooser & Loading Experience",
-          "content": "Another part of the project was improving what comes after the user specified what kind of video they want to create. The next step in the user journey was choosing a template that would define the look of the video. For this part I reworked the template selector and introduced sorting options by identifying the most important characteristics users were looking by looking at our data metrics. After that there was a fairly long loading process, to make this step more engaging I created a tips & tricks slideshow that would surface useful hints in video format while the user was waiting. Here the tips shown were selected based on what brings the most user value towards our activation metric.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/a83695f3-9b96-409f-b8ce-bff0301c4e27/templatechoosergif.gif"
-            }
-          ]
-        },
-        {
-          "phase": "Video Creation Experiments",
-          "content": "I've also experimented with a more through rework for the video creation process where instead of templates users were able to define the visual look of the video by setting up different parameters such as the avatar presenting, fonts used and the color palette. The outcome of their choices would be visualised immediately on the right side, giving them a real-time preview. This project was unfortunately scope cut but hopefully will be implemented on a later date.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/7ee3c2f5-6cb3-4176-a969-5e2b7affc51b/experiments.png"
-            }
-          ]
-        },
-        {
-          "phase": "Interactive Element Customization",
-          "content": "This was a project that enabled you to style interactive components such as branching and quizzes to your liking. It was especially important to comply to brand guidelines so each customer could style them to match their own corporate look. Since our users are not designers I set out to simplify the styling process to the absolute maximum possible by coming up with automation rules that figure out the necessary details.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/1ddd3d4a-a8f6-4237-b3f0-87c29585ee31/colossyanfinalgif.gif"
-            }
-          ]
-        },
-        {
-          "phase": "Customization Process",
-          "content": "When first starting the project I was under the (later turned out to be) false impression that users wanted to have detailed customization options. So I created an accordion style layout where users could click on any element on the canvas an set up its look in every possible way. Upon user testing this solution and user intel coming in from corporate clients we realised that we needed something much simpler as the only thing that mattered is to apply the brand kit and quickly if possible. Unfortunately this information only came at a later date but I learned a lot from this initial prototype. It made me realise how quickly this feature can get complicated and what parts should and could be automated.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/60003509-c7fb-4f90-a780-c0c56bb5cff6/colossyangif.gif"
-            }
-          ]
-        },
-        {
-          "phase": "Smart Brand Application",
-          "content": "After this prototype I set out to define the most important characteristics that define a brand look and wrote a detailed documentation on how to automate this process. By defining two types of fonts and three types of colors the whole componet can be styled. Hover states are automatically calculated based on the base color and more neat tricks. I also introduced a smart apply button that did all of this in one click by identifying what colors worked the best for the background and CTA color. I also coded this prototype to show how this logic works in action: https://button-generator-2.vercel.app/"
-        },
-        {
-          "phase": "Avatar Page",
-          "content": "A project to redesign the avatar library page on the home dashboard. The goal was to have easily hideable filtering options.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/a0fb7cc6-0dc4-4190-a836-98e405885e6c/colossyanavatarspagegif.gif"
-            }
-          ]
-        },
-        {
-          "phase": "Creating Your Own Avatar",
-          "content": "This was a project to let users create an avatar based on themselves.",
-          "images": [
-            {
-              "url": "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/cb12a5c5-ed87-42c6-809a-f4b299ce8b2f/croppinggif.gif"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "prezi",
-      "title": "Prezi",
-      "category": "Presentation Editor",
-      "thumbnail": "https://armin.work/.netlify/functions/get-image?id=project-thumbnail-prezi-1762861076164",
-      "images": [
-        "https://framerusercontent.com/images/1QxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/5RxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/8SxWvpQMfLKqHPCKLfNmXEJGQk.png"
-      ],
-      "description": "Designed new features for Prezi's presentation editor, focusing on improving the creation and collaboration experience.",
-      "year": "2023",
-      "client": "Prezi",
-      "role": "Senior Product Designer",
-      "history": [
-        {
-          "phase": "Feature Design",
-          "content": "Designed new features for Prezi's presentation editor, enhancing the creation workflow and collaboration capabilities for teams."
-        }
-      ]
-    },
-    {
-      "id": "piktochart",
-      "title": "Piktochart (Piktostory)",
-      "category": "AI Video Editor",
-      "thumbnail": "https://armin.work/.netlify/functions/get-image?id=project-thumbnail-piktochart-1762861090565",
-      "images": [
-        "https://framerusercontent.com/images/3TxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/7UxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/9VxWvpQMfLKqHPCKLfNmXEJGQk.png"
-      ],
-      "description": "AI-powered video editor (Piktostory) that simplifies video creation and editing for content creators.",
-      "year": "2023",
-      "client": "Piktochart",
-      "role": "Lead Product Designer",
-      "history": [
-        {
-          "phase": "AI Video Editor",
-          "content": "Designed Piktostory, an AI-powered video editor that makes video creation accessible to everyone. Focus on automating complex editing tasks while maintaining creative control."
-        }
-      ]
-    },
-    {
-      "id": "world-press-photo",
-      "title": "World Press Photo",
-      "category": "Website Redesign",
-      "thumbnail": "indexeddb:world-press-photo-thumbnail",
-      "images": [
-        "https://framerusercontent.com/images/2WxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/6XxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/4YxWvpQMfLKqHPCKLfNmXEJGQk.png"
-      ],
-      "description": "Webby Award-winning website redesign for World Press Photo, showcasing award-winning photojournalism.",
-      "year": "2022",
-      "client": "World Press Photo",
-      "role": "Lead Designer",
-      "history": [
-        {
-          "phase": "Webby Award Winner",
-          "content": "Led the website redesign for World Press Photo that won a Webby Award. Created an immersive experience that honors the power of photojournalism and makes the archive accessible to global audiences."
-        }
-      ]
-    },
-    {
-      "id": "omron",
-      "title": "Omron",
-      "category": "Medical Device Marketplace",
-      "thumbnail": "https://armin.work/.netlify/functions/get-image?id=omron-thumbnail",
-      "images": [
-        "https://framerusercontent.com/images/1QxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/5RxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/8SxWvpQMfLKqHPCKLfNmXEJGQk.png"
-      ],
-      "description": "E-commerce platform for Omron's medical devices, making healthcare products accessible to consumers.",
-      "year": "2022",
-      "client": "Omron Healthcare",
-      "role": "Product Designer",
-      "history": [
-        {
-          "phase": "Medical Device Marketplace",
-          "content": "Designed an e-commerce platform for Omron's medical devices, focusing on building trust and making complex healthcare products easy to understand and purchase."
-        }
-      ]
-    },
-    {
-      "id": "joinme",
-      "title": "Join.me",
-      "category": "Video Conferencing",
-      "thumbnail": "indexeddb:joinme-thumbnail",
-      "images": [
-        "https://framerusercontent.com/images/3TxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/7UxWvpQMfLKqHPCKLfNmXEJGQk.png",
-        "https://framerusercontent.com/images/9VxWvpQMfLKqHPCKLfNmXEJGQk.png"
-      ],
-      "description": "Video conferencing tool designed for seamless remote collaboration and screen sharing.",
-      "year": "2021",
-      "client": "Join.me",
-      "role": "Product Designer",
-      "history": [
-        {
-          "phase": "Video Conferencing Tool",
-          "content": "Designed features for Join.me's video conferencing platform, focusing on making remote meetings and screen sharing effortless and reliable."
-        }
+      "development": [
+        "HTML & CSS",
+        "JavaScript",
+        "React",
+        "Tailwind CSS",
+        "Git",
+        "Responsive Design"
       ]
     }
-  ],
-  "about": {},
+  },
   "home": {}
 }
