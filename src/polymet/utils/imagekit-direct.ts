@@ -13,7 +13,21 @@ export async function uploadToImageKitDirect(
   file: File, 
   imageId: string
 ): Promise<ImageKitUploadResult> {
-  console.log(`[ImageKit Direct] Starting upload for ${imageId}, size: ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+  const fileSizeMB = file.size / 1024 / 1024;
+  console.log(`[ImageKit Direct] Starting upload for ${imageId}, size: ${fileSizeMB.toFixed(2)}MB`);
+  
+  // Check file size limit to prevent function crashes
+  if (fileSizeMB > 10) {
+    console.warn(`[ImageKit Direct] File too large: ${fileSizeMB.toFixed(2)}MB (max: 10MB)`);
+    return {
+      success: false,
+      imageId,
+      originalUrl: '',
+      resizedUrl: '',
+      url: '',
+      error: `File too large: ${fileSizeMB.toFixed(2)}MB. Please compress to under 10MB first.`
+    };
+  }
   
   try {
     // Use the same approach as our working simple function - go through our backend
