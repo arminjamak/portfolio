@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-11T11:39:24.182Z",
+  "timestamp": "2025-11-11T11:52:10.734Z",
   "projects": [
     {
       "id": "qatar",
@@ -52,7 +52,7 @@
       "id": "colossyan",
       "title": "Colossyan",
       "category": "AI Avatar Editor",
-      "thumbnail": "https://armin.work/.netlify/functions/get-image?id=project-thumbnail-colossyan-1762860960051",
+      "thumbnail": "https://armin.work/.netlify/functions/get-image?id=project-thumbnail-colossyan-1762861688527-pvadcrmz4",
       "images": [
         "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/2d407a87-fd66-4f36-bff7-b86a2034e9a8/Screenshot+2025-06-04+at+17.58.39.png",
         "https://images.squarespace-cdn.com/content/v1/561dfdd7e4b0be4652489649/196de747-43e2-4405-8467-a373091ad634/bubblesgif.gif",
