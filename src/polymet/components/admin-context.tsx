@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from "react";
 import { syncToGitHub, exportAllData } from "@/polymet/data/sync-service";
+import { addMigrationButton } from '@/polymet/data/migrate-images';
 
 interface AdminContextType {
   isAdmin: boolean;
@@ -34,6 +35,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       setIsAdmin(true);
       localStorage.setItem(ADMIN_STORAGE_KEY, "true");
+      // Add migration button when admin logs in
+      setTimeout(() => addMigrationButton(), 100);
       return true;
     }
     return false;

@@ -88,6 +88,8 @@ export function EditProjectModal({
           // Try to upload to Netlify Blobs immediately
           try {
             const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}`;
+            console.log(`[EditProjectModal] Attempting to upload ${imageId} to Netlify Blobs...`);
+            
             const response = await fetch('/.netlify/functions/upload-image', {
               method: 'POST',
               headers: {
@@ -99,18 +101,23 @@ export function EditProjectModal({
               }),
             });
 
+            console.log(`[EditProjectModal] Upload response status: ${response.status}`);
+            
             if (response.ok) {
               const result = await response.json();
               console.log(`[EditProjectModal] ✅ Uploaded thumbnail to Netlify Blobs: ${result.url}`);
               // Use the Netlify Blob URL instead of base64
               setThumbnail(result.url);
             } else {
-              console.warn(`[EditProjectModal] Failed to upload to Netlify Blobs, using base64 fallback`);
+              const errorText = await response.text();
+              console.error(`[EditProjectModal] Failed to upload to Netlify Blobs (${response.status}): ${errorText}`);
+              console.warn(`[EditProjectModal] Using base64 fallback`);
               // Fallback to base64 if Netlify Blobs fails
               setThumbnail(dataUrl);
             }
           } catch (error) {
-            console.warn(`[EditProjectModal] Error uploading to Netlify Blobs, using base64 fallback:`, error);
+            console.error(`[EditProjectModal] Error uploading to Netlify Blobs:`, error);
+            console.warn(`[EditProjectModal] Using base64 fallback`);
             // Fallback to base64 if Netlify Blobs fails
             setThumbnail(dataUrl);
           }
