@@ -16,16 +16,16 @@ export async function uploadToImageKitDirect(
   const fileSizeMB = file.size / 1024 / 1024;
   console.log(`[ImageKit Direct] Starting upload for ${imageId}, size: ${fileSizeMB.toFixed(2)}MB`);
   
-  // Check file size limit to prevent function crashes
-  if (fileSizeMB > 10) {
-    console.warn(`[ImageKit Direct] File too large: ${fileSizeMB.toFixed(2)}MB (max: 10MB)`);
+  // Check file size limit - increased for better user experience
+  if (fileSizeMB > 20) {
+    console.warn(`[ImageKit Direct] File too large: ${fileSizeMB.toFixed(2)}MB (max: 20MB)`);
     return {
       success: false,
       imageId,
       originalUrl: '',
       resizedUrl: '',
       url: '',
-      error: `File too large: ${fileSizeMB.toFixed(2)}MB. Please compress to under 10MB first.`
+      error: `File too large: ${fileSizeMB.toFixed(2)}MB. Please compress to under 20MB first.`
     };
   }
   

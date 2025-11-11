@@ -83,15 +83,33 @@ export function EditProjectModal({
       const fileSizeMB = file.size / 1024 / 1024;
       console.log(`[EditProjectModal] Uploading ${imageId} to ImageKit (${fileSizeMB.toFixed(2)}MB)...`);
       
-      // Choose upload method based on file size
-      let result;
-      if (fileSizeMB > 10) {
-        console.log(`[EditProjectModal] Using client-side upload for large file (${fileSizeMB.toFixed(2)}MB)`);
-        result = await uploadToImageKitClient(file, imageId);
-      } else {
-        console.log(`[EditProjectModal] Using backend upload for small file (${fileSizeMB.toFixed(2)}MB)`);
-        result = await uploadToImageKitDirect(file, imageId);
+      // For now, use backend upload for all files but with higher size limit
+      // TODO: Fix client-side signature authentication later
+      console.log(`[EditProjectModal] Using backend upload for ${fileSizeMB.toFixed(2)}MB file`);
+      
+      if (fileSizeMB > 20) {
+        // Show error for extremely large files
+        const result = {
+          success: false,
+          imageId,
+          originalUrl: '',
+          resizedUrl: '',
+          url: '',
+          error: `File too large: ${fileSizeMB.toFixed(2)}MB. Please compress to under 20MB.`
+        };
+        
+        console.warn(`[EditProjectModal] File too large: ${result.error}`);
+        // Fallback to base64 for display
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setThumbnail(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+        setIsUploading(false);
+        return;
       }
+      
+      const result = await uploadToImageKitDirect(file, imageId);
       
       if (result.success && result.url) {
         console.log(`[EditProjectModal] ✅ Direct upload successful: ${result.resizedUrl}`);
