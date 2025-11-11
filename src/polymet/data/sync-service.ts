@@ -65,28 +65,39 @@ const uploadImageToNetlifyBlobs = async (imageId: string, dataUrl: string): Prom
   }
 };
 
-// Replace indexeddb: references with Netlify Blob URLs
-const replaceIndexedDBReferences = async (obj: any): Promise<any> => {
-  if (typeof obj === 'string' && obj.startsWith('indexeddb:')) {
-    const imageId = obj.replace('indexeddb:', '');
-    const dataUrl = await storageService.getImage(imageId);
+// Replace indexeddb: references and base64 data URLs with Netlify Blob URLs
+const replaceImageReferencesWithBlobUrls = async (obj: any): Promise<any> => {
+  if (typeof obj === 'string') {
+    // Handle indexeddb: references
+    if (obj.startsWith('indexeddb:')) {
+      const imageId = obj.replace('indexeddb:', '');
+      const dataUrl = await storageService.getImage(imageId);
+      
+      if (dataUrl) {
+        const blobUrl = await uploadImageToNetlifyBlobs(imageId, dataUrl);
+        return blobUrl || obj; // Return original if upload fails
+      }
+      return obj;
+    }
     
-    if (dataUrl) {
-      const blobUrl = await uploadImageToNetlifyBlobs(imageId, dataUrl);
+    // Handle base64 data URLs (data:image/...)
+    if (obj.startsWith('data:image/')) {
+      const imageId = `image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      console.log(`[replaceIndexedDBReferences] Found base64 image, uploading as ${imageId}...`);
+      const blobUrl = await uploadImageToNetlifyBlobs(imageId, obj);
       return blobUrl || obj; // Return original if upload fails
     }
-    return obj;
   }
   
   if (Array.isArray(obj)) {
-    const results = await Promise.all(obj.map(item => replaceIndexedDBReferences(item)));
+    const results = await Promise.all(obj.map(item => replaceImageReferencesWithBlobUrls(item)));
     return results;
   }
   
   if (obj && typeof obj === 'object') {
     const result: any = {};
     for (const [key, value] of Object.entries(obj)) {
-      result[key] = await replaceIndexedDBReferences(value);
+      result[key] = await replaceImageReferencesWithBlobUrls(value);
     }
     return result;
   }
@@ -111,7 +122,7 @@ export const exportAllData = async (): Promise<any> => {
     if (projectsData) {
       const projects = JSON.parse(projectsData);
       console.log('[exportAllData] Processing projects for Netlify Blobs upload...');
-      data.projects = await replaceIndexedDBReferences(projects);
+      data.projects = await replaceImageReferencesWithBlobUrls(projects);
     }
   } catch (error) {
     console.error('[exportAllData] Error exporting projects:', error);
@@ -123,7 +134,7 @@ export const exportAllData = async (): Promise<any> => {
     if (aboutData) {
       const about = JSON.parse(aboutData);
       console.log('[exportAllData] Processing about data for Netlify Blobs upload...');
-      data.about = await replaceIndexedDBReferences(about);
+      data.about = await replaceImageReferencesWithBlobUrls(about);
     }
   } catch (error) {
     console.error('[exportAllData] Error exporting about:', error);
