@@ -47,11 +47,13 @@ export function EditProjectModal({
   const handleSave = async () => {
     setIsSaving(true);
     try {
+      console.log(`[EditProjectModal] Saving project with thumbnail: ${thumbnail}`);
       await onSave({
         title,
         category,
         thumbnail,
       });
+      console.log(`[EditProjectModal] ✅ Project saved successfully`);
       onOpenChange(false);
     } catch (error) {
       console.error("Error saving project:", error);
