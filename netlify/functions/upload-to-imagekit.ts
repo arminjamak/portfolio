@@ -54,7 +54,41 @@ export default async (request: Request, context: Context) => {
 
     // Convert base64 to buffer for proper file upload
     const base64Data = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
-    const buffer = Buffer.from(base64Data, 'base64');
+    
+    // Validate base64 data
+    if (!base64Data || base64Data.length < 100) {
+      console.log(`[upload-to-imagekit] Invalid or too short base64 data: ${base64Data.length} characters`);
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Invalid base64 data',
+        imageId,
+        originalUrl: '',
+        resizedUrl: '',
+        url: '',
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    
+    let buffer;
+    try {
+      buffer = Buffer.from(base64Data, 'base64');
+      console.log(`[upload-to-imagekit] Buffer created successfully: ${buffer.length} bytes`);
+    } catch (error) {
+      console.error(`[upload-to-imagekit] Failed to create buffer from base64:`, error);
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Failed to process image data',
+        imageId,
+        originalUrl: '',
+        resizedUrl: '',
+        url: '',
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
     
     // Create form data for ImageKit upload
     const formData = new FormData();
@@ -79,13 +113,29 @@ export default async (request: Request, context: Context) => {
       }
     }
     
-    const imagekitResponse = await fetch(uploadUrl, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${auth}`,
-      },
-      body: formData,
-    });
+    let imagekitResponse;
+    try {
+      imagekitResponse = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${auth}`,
+        },
+        body: formData,
+      });
+    } catch (fetchError) {
+      console.error(`[upload-to-imagekit] Fetch error:`, fetchError);
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Network error during upload',
+        imageId,
+        originalUrl: '',
+        resizedUrl: '',
+        url: '',
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     console.log(`[upload-to-imagekit] Response status: ${imagekitResponse.status}`);
     console.log(`[upload-to-imagekit] Response headers:`, Object.fromEntries(imagekitResponse.headers.entries()));
@@ -102,7 +152,18 @@ export default async (request: Request, context: Context) => {
         console.error(`[upload-to-imagekit] Raw error:`, errorText);
       }
       
-      return new Response(`ImageKit upload failed: ${errorText}`, { status: 500 });
+      // Return graceful failure instead of 500 error
+      return new Response(JSON.stringify({
+        success: false,
+        error: `ImageKit upload failed: ${errorText}`,
+        imageId,
+        originalUrl: '',
+        resizedUrl: '',
+        url: '',
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const result = await imagekitResponse.json();
