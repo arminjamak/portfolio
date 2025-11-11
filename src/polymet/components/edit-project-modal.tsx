@@ -87,7 +87,8 @@ export function EditProjectModal({
           
           // Try to upload to Netlify Blobs immediately
           try {
-            const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}`;
+            // Always generate a unique ID for new uploads
+            const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             console.log(`[EditProjectModal] Attempting to upload ${imageId} to Netlify Blobs...`);
             
             const response = await fetch('/.netlify/functions/upload-image', {

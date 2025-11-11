@@ -22,6 +22,9 @@ export default async (request: Request, context: Context) => {
       headers: {
         'Content-Type': 'image/png', // Default to PNG, could be dynamic
         'Cache-Control': 'public, max-age=31536000', // Cache for 1 year
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
       },
     });
   } catch (error) {
