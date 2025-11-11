@@ -59,10 +59,12 @@ export function About() {
       reader.onloadend = async () => {
         const dataUrl = reader.result as string;
         
-        // Try to upload to Netlify Blobs immediately
+        // Try to upload to Cloudflare R2 immediately
         try {
-          const imageId = `about-profile-${Date.now()}`;
-          const response = await fetch('/.netlify/functions/upload-image', {
+          const imageId = `about-profile-image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          console.log(`[About] Attempting to upload ${imageId} to Cloudflare R2...`);
+          
+          const response = await fetch('/.netlify/functions/upload-to-r2', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -72,20 +74,21 @@ export function About() {
               imageData: dataUrl,
             }),
           });
-
+          
           if (response.ok) {
             const result = await response.json();
-            console.log(`[AboutPage] ✅ Uploaded profile image to Netlify Blobs: ${result.url}`);
-            // Use the Netlify Blob URL instead of base64
-            setTempImageUrl(result.url);
+            console.log(`[About] ✅ Uploaded profile image to Cloudflare R2: ${result.resizedUrl}`);
+            // Use the Cloudflare R2 resized URL instead of base64
+            setTempImageUrl(result.resizedUrl);
           } else {
-            console.warn(`[AboutPage] Failed to upload to Netlify Blobs, using base64 fallback`);
-            // Fallback to base64 if Netlify Blobs fails
+            const errorText = await response.text();
+            console.warn(`[About] Upload failed: ${errorText}, falling back to base64`);
+            // Fallback to base64 if upload fails
             setTempImageUrl(dataUrl);
           }
-        } catch (error) {
-          console.warn(`[AboutPage] Error uploading to Netlify Blobs, using base64 fallback:`, error);
-          // Fallback to base64 if Netlify Blobs fails
+        } catch (uploadError) {
+          console.error(`[About] Upload error:`, uploadError);
+          // Fallback to base64 if upload fails
           setTempImageUrl(dataUrl);
         }
         

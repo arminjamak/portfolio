@@ -87,13 +87,13 @@ export function EditProjectModal({
         reader.onloadend = async () => {
           const dataUrl = reader.result as string;
           
-          // Try to upload to Netlify Blobs immediately
+          // Try to upload to Cloudflare R2 immediately
           try {
             // Always generate a unique ID for new uploads
             const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            console.log(`[EditProjectModal] Attempting to upload ${imageId} to Netlify Blobs...`);
+            console.log(`[EditProjectModal] Attempting to upload ${imageId} to Cloudflare R2...`);
             
-            const response = await fetch('/.netlify/functions/upload-image', {
+            const response = await fetch('/.netlify/functions/upload-to-r2', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -103,25 +103,23 @@ export function EditProjectModal({
                 imageData: dataUrl,
               }),
             });
-
+            
             console.log(`[EditProjectModal] Upload response status: ${response.status}`);
             
             if (response.ok) {
               const result = await response.json();
-              console.log(`[EditProjectModal] ✅ Uploaded thumbnail to Netlify Blobs: ${result.url}`);
-              // Use the Netlify Blob URL instead of base64
-              setThumbnail(result.url);
+              console.log(`[EditProjectModal] ✅ Uploaded thumbnail to Cloudflare R2: ${result.resizedUrl}`);
+              // Use the Cloudflare R2 resized URL instead of base64
+              setThumbnail(result.resizedUrl);
             } else {
               const errorText = await response.text();
-              console.error(`[EditProjectModal] Failed to upload to Netlify Blobs (${response.status}): ${errorText}`);
-              console.warn(`[EditProjectModal] Using base64 fallback`);
-              // Fallback to base64 if Netlify Blobs fails
+              console.warn(`[EditProjectModal] Upload failed: ${errorText}, falling back to base64`);
+              // Fallback to base64 if upload fails
               setThumbnail(dataUrl);
             }
-          } catch (error) {
-            console.error(`[EditProjectModal] Error uploading to Netlify Blobs:`, error);
-            console.warn(`[EditProjectModal] Using base64 fallback`);
-            // Fallback to base64 if Netlify Blobs fails
+          } catch (uploadError) {
+            console.error(`[EditProjectModal] Upload error:`, uploadError);
+            // Fallback to base64 if upload fails
             setThumbnail(dataUrl);
           }
           

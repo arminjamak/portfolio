@@ -156,10 +156,10 @@ export function ContentEditor({
       reader.onloadend = async () => {
         const dataUrl = reader.result as string;
         
-        // Try to upload to Netlify Blobs immediately
+        // Try to upload to Cloudflare R2 immediately
         try {
-          const imageId = `content-${blockId}-${Date.now()}`;
-          const response = await fetch('/.netlify/functions/upload-image', {
+          const imageId = `content-${blockId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const response = await fetch('/.netlify/functions/upload-to-r2', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -172,17 +172,18 @@ export function ContentEditor({
 
           if (response.ok) {
             const result = await response.json();
-            console.log(`[ContentEditor] ✅ Uploaded to Netlify Blobs: ${result.url}`);
-            // Use the Netlify Blob URL instead of base64
-            updateBlock(blockId, { content: result.url });
+            console.log(`[ContentEditor] ✅ Uploaded to Cloudflare R2: ${result.resizedUrl}`);
+            // Use the Cloudflare R2 resized URL instead of base64
+            updateBlock(blockId, { content: result.resizedUrl });
           } else {
-            console.warn(`[ContentEditor] Failed to upload to Netlify Blobs, using base64 fallback`);
-            // Fallback to base64 if Netlify Blobs fails
+            const errorText = await response.text();
+            console.warn(`[ContentEditor] Failed to upload to Cloudflare R2: ${errorText}, using base64 fallback`);
+            // Fallback to base64 if R2 fails
             updateBlock(blockId, { content: dataUrl });
           }
         } catch (error) {
-          console.warn(`[ContentEditor] Error uploading to Netlify Blobs, using base64 fallback:`, error);
-          // Fallback to base64 if Netlify Blobs fails
+          console.warn(`[ContentEditor] Error uploading to Cloudflare R2, using base64 fallback:`, error);
+          // Fallback to base64 if R2 fails
           updateBlock(blockId, { content: dataUrl });
         }
         
