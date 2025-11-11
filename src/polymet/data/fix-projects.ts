@@ -1,7 +1,7 @@
 // Quick fix for projects with broken IndexedDB references
 import { getProjects } from './projects-data';
 
-const STORAGE_KEY = 'polymet-projects';
+const STORAGE_KEY = 'portfolio_projects_data';
 
 export async function fixBrokenProjects() {
   console.log('[fixBrokenProjects] Starting fix for broken project references...');

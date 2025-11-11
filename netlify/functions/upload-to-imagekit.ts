@@ -71,8 +71,8 @@ export default async (request: Request, context: Context) => {
     // Convert base64 to buffer for proper file upload
     const base64Data = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
     
-    // Validate base64 data
-    if (!base64Data || base64Data.length < 100) {
+    // Validate base64 data (more lenient)
+    if (!base64Data || base64Data.length < 20) {
       console.log(`[upload-to-imagekit] Invalid or too short base64 data: ${base64Data.length} characters`);
       return new Response(JSON.stringify({
         success: false,
