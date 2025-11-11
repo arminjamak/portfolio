@@ -156,9 +156,10 @@ export function ContentEditor({
       reader.onloadend = async () => {
         const dataUrl = reader.result as string;
         
-        // Try to upload to Cloudflare R2 immediately
+        // ALWAYS upload to ImageKit for every file selection
         try {
           const imageId = `content-${blockId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          console.log(`[ContentEditor] Force uploading fresh file ${imageId} to ImageKit...`);
           const response = await fetch('/.netlify/functions/upload-to-imagekit', {
             method: 'POST',
             headers: {

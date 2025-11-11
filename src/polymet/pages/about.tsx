@@ -59,10 +59,10 @@ export function About() {
       reader.onloadend = async () => {
         const dataUrl = reader.result as string;
         
-        // Try to upload to Cloudflare R2 immediately
+        // ALWAYS upload to ImageKit for every file selection
         try {
           const imageId = `about-profile-image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          console.log(`[About] Attempting to upload ${imageId} to ImageKit...`);
+          console.log(`[About] Force uploading fresh file ${imageId} to ImageKit...`);
           
           const response = await fetch('/.netlify/functions/upload-to-imagekit', {
             method: 'POST',

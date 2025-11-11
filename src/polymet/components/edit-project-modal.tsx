@@ -87,11 +87,11 @@ export function EditProjectModal({
         reader.onloadend = async () => {
           const dataUrl = reader.result as string;
           
-          // Try to upload to Cloudflare R2 immediately
+          // ALWAYS upload to ImageKit for every file selection, regardless of previous state
           try {
             // Always generate a unique ID for new uploads
             const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            console.log(`[EditProjectModal] Attempting to upload ${imageId} to ImageKit...`);
+            console.log(`[EditProjectModal] Force uploading fresh file ${imageId} to ImageKit...`);
             
             const response = await fetch('/.netlify/functions/upload-to-imagekit', {
               method: 'POST',
