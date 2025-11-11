@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Project } from "@/polymet/data/projects-data";
 import { SaveIcon, TrashIcon, UploadIcon, LoaderIcon } from "lucide-react";
 import { uploadToImageKitDirect } from "@/polymet/utils/imagekit-direct";
+import { uploadToImageKitClient } from "@/polymet/utils/imagekit-client-upload";
 
 interface EditProjectModalProps {
   open: boolean;
@@ -79,10 +80,18 @@ export function EditProjectModal({
     try {
       // Generate unique ID for upload
       const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      console.log(`[EditProjectModal] Direct uploading ${imageId} to ImageKit (${(file.size / 1024 / 1024).toFixed(2)}MB)...`);
+      const fileSizeMB = file.size / 1024 / 1024;
+      console.log(`[EditProjectModal] Uploading ${imageId} to ImageKit (${fileSizeMB.toFixed(2)}MB)...`);
       
-      // Use direct ImageKit upload (no Netlify Function limits)
-      const result = await uploadToImageKitDirect(file, imageId);
+      // Choose upload method based on file size
+      let result;
+      if (fileSizeMB > 10) {
+        console.log(`[EditProjectModal] Using client-side upload for large file (${fileSizeMB.toFixed(2)}MB)`);
+        result = await uploadToImageKitClient(file, imageId);
+      } else {
+        console.log(`[EditProjectModal] Using backend upload for small file (${fileSizeMB.toFixed(2)}MB)`);
+        result = await uploadToImageKitDirect(file, imageId);
+      }
       
       if (result.success && result.url) {
         console.log(`[EditProjectModal] ✅ Direct upload successful: ${result.resizedUrl}`);
