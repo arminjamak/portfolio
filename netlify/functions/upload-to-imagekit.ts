@@ -40,7 +40,14 @@ export default async (request: Request, context: Context) => {
     const { imageId, imageData } = await request.json();
     
     if (!imageId || !imageData) {
-      return new Response('Missing imageId or imageData', { status: 400 });
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Missing imageId or imageData',
+        received: { imageId: !!imageId, imageData: !!imageData }
+      }), { 
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Only skip if it's clearly an IndexedDB reference (not valid base64)
