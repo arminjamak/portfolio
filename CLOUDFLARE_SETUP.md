@@ -13,8 +13,9 @@ CLOUDFLARE_ACCOUNT_ID=your_account_id_here
 # Cloudflare R2 Bucket Name
 CLOUDFLARE_R2_BUCKET=portfolio-images
 
-# Cloudflare R2 API Token (with R2 permissions)
-CLOUDFLARE_R2_TOKEN=your_r2_token_here
+# Cloudflare R2 S3-compatible credentials (NOT API token)
+CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key_id_here
+CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_access_key_here
 
 # Your R2 bucket's public domain (after setting up custom domain)
 CLOUDFLARE_R2_DOMAIN=your-bucket.your-domain.com
@@ -30,12 +31,11 @@ CLOUDFLARE_IMAGES_DOMAIN=your-domain.com
 2. Create a new bucket named `portfolio-images`
 3. Enable public access for the bucket
 
-### 2. Create API Token
-1. Go to Cloudflare Dashboard → My Profile → API Tokens
-2. Create Custom Token with these permissions:
-   - Account: Cloudflare R2:Edit
-   - Zone: Zone:Read (for your domain)
-3. Copy the token to `CLOUDFLARE_R2_TOKEN`
+### 2. Create R2 S3-Compatible Credentials
+1. Go to Cloudflare Dashboard → R2 Object Storage → Manage R2 API tokens
+2. Create API token with R2 permissions
+3. Copy the Access Key ID to `CLOUDFLARE_R2_ACCESS_KEY_ID`
+4. Copy the Secret Access Key to `CLOUDFLARE_R2_SECRET_ACCESS_KEY`
 
 ### 3. Set up Custom Domain (Optional but Recommended)
 1. In R2 bucket settings, add a custom domain
