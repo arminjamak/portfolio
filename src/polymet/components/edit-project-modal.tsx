@@ -93,7 +93,7 @@ export function EditProjectModal({
             const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             console.log(`[EditProjectModal] Force uploading fresh file ${imageId} to ImageKit...`);
             
-            const response = await fetch('/.netlify/functions/upload-to-imagekit', {
+            const response = await fetch('/.netlify/functions/upload-to-imagekit-simple', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
