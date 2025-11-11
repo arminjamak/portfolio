@@ -1,6 +1,37 @@
 import type { Context } from '@netlify/functions';
 
 export default async (request: Request, context: Context) => {
+  // Add immediate logging to catch any startup errors
+  console.log('[upload-to-imagekit] Function started');
+  
+  try {
+    // Check environment variables immediately
+    const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
+    const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
+    const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;
+    
+    console.log('[upload-to-imagekit] Environment check:', {
+      publicKey: !!publicKey,
+      privateKey: !!privateKey,
+      urlEndpoint: !!urlEndpoint
+    });
+    
+    if (!publicKey || !privateKey || !urlEndpoint) {
+      console.error('[upload-to-imagekit] Missing environment variables');
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Missing ImageKit credentials',
+        details: {
+          publicKey: !!publicKey,
+          privateKey: !!privateKey,
+          urlEndpoint: !!urlEndpoint
+        }
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }
@@ -181,5 +212,9 @@ export default async (request: Request, context: Context) => {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
+  }
+  } catch (startupError) {
+    console.error('[upload-to-imagekit] Startup error:', startupError);
+    return new Response(`Function startup error: ${startupError instanceof Error ? startupError.message : 'Unknown error'}`, { status: 503 });
   }
 };
