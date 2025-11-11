@@ -4,6 +4,11 @@ import { storageService, isDataUrl } from "@/polymet/data/storage-service";
 export interface AboutData {
   content: ContentBlock[];
   profileImage: string;
+  skills?: {
+    design: string[];
+    tools: string[];
+    development: string[];
+  };
 }
 
 const defaultAboutData: AboutData = {
@@ -41,6 +46,12 @@ const defaultAboutData: AboutData = {
   ],
 
   profileImage: "https://github.com/yusufhilmi.png",
+  
+  skills: {
+    design: ["User Research", "Information Architecture", "Interaction Design", "Visual Design", "Prototyping", "Design Systems"],
+    tools: ["Figma", "Adobe Creative Suite", "Sketch", "Principle", "Framer", "Miro"],
+    development: ["HTML & CSS", "JavaScript", "React", "Tailwind CSS", "Git", "Responsive Design"]
+  }
 };
 
 // LocalStorage key

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FileTextIcon, EditIcon, UploadIcon, LoaderIcon, SaveIcon, XIcon } from "lucide-react";
+import { FileTextIcon, EditIcon, UploadIcon, LoaderIcon, SaveIcon, XIcon, PlusIcon, MinusIcon } from "lucide-react";
 import { useAdmin } from "@/polymet/components/admin-context";
 import {
   ContentEditor,
@@ -18,6 +18,12 @@ export function About() {
   const [tempImageUrl, setTempImageUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isEditingSkills, setIsEditingSkills] = useState(false);
+  const [skillsData, setSkillsData] = useState({
+    design: ["User Research", "Information Architecture", "Interaction Design", "Visual Design", "Prototyping", "Design Systems"],
+    tools: ["Figma", "Adobe Creative Suite", "Sketch", "Principle", "Framer", "Miro"],
+    development: ["HTML & CSS", "JavaScript", "React", "Tailwind CSS", "Git", "Responsive Design"]
+  });
 
   // Load data on mount
   useEffect(() => {
@@ -25,6 +31,9 @@ export function About() {
       const data = await getAboutData();
       setContent(data.content);
       setProfileImage(data.profileImage);
+      if (data.skills) {
+        setSkillsData(data.skills);
+      }
     };
     loadData();
   }, []);
@@ -78,12 +87,49 @@ export function About() {
     setIsEditingImage(true);
   };
   const handleCVClick = () => {
-    // Replace this URL with the actual Google Drive link
     window.open(
-      "https://drive.google.com/file/d/YOUR_CV_FILE_ID/view",
+      "https://drive.google.com/file/d/1VQE0C7HJwpEyIgJCnNCEGzbSaQ5i0ajp/view?usp=sharing",
       "_blank",
       "noopener,noreferrer"
     );
+  };
+
+  const handleSaveSkills = async () => {
+    await updateAboutData({ skills: skillsData });
+    setIsEditingSkills(false);
+  };
+
+  const handleCancelSkills = () => {
+    // Reset to original data
+    const loadData = async () => {
+      const data = await getAboutData();
+      if (data.skills) {
+        setSkillsData(data.skills);
+      }
+    };
+    loadData();
+    setIsEditingSkills(false);
+  };
+
+  const addSkillItem = (category: keyof typeof skillsData) => {
+    setSkillsData(prev => ({
+      ...prev,
+      [category]: [...prev[category], ""]
+    }));
+  };
+
+  const removeSkillItem = (category: keyof typeof skillsData, index: number) => {
+    setSkillsData(prev => ({
+      ...prev,
+      [category]: prev[category].filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateSkillItem = (category: keyof typeof skillsData, index: number, value: string) => {
+    setSkillsData(prev => ({
+      ...prev,
+      [category]: prev[category].map((item, i) => i === index ? value : item)
+    }));
   };
 
   return (
@@ -241,14 +287,14 @@ export function About() {
 
               <div className="flex flex-wrap gap-4 pt-4">
                 <a
-                  href="mailto:hello@arminjamak.com"
+                  href="mailto:jamakarmin@gmail.com"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  hello@arminjamak.com
+                  Email
                 </a>
                 <span className="text-muted-foreground">•</span>
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/armin-jamak/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -257,12 +303,12 @@ export function About() {
                 </a>
                 <span className="text-muted-foreground">•</span>
                 <a
-                  href="https://twitter.com"
+                  href="https://github.com/arminjamak"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Twitter
+                  Github
                 </a>
               </div>
             </div>
@@ -271,45 +317,83 @@ export function About() {
 
         {/* Skills & Tools Section */}
         <div className="mt-16 md:mt-24 space-y-8">
-          <h2 className="text-3xl font-bold">Skills & Tools</h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-3">
-              <h3 className="font-semibold text-lg">Design</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>User Research</li>
-                <li>Information Architecture</li>
-                <li>Interaction Design</li>
-                <li>Visual Design</li>
-                <li>Prototyping</li>
-                <li>Design Systems</li>
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="font-semibold text-lg">Tools</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>Figma</li>
-                <li>Adobe Creative Suite</li>
-                <li>Sketch</li>
-                <li>Principle</li>
-                <li>Framer</li>
-                <li>Miro</li>
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="font-semibold text-lg">Development</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>HTML & CSS</li>
-                <li>JavaScript</li>
-                <li>React</li>
-                <li>Tailwind CSS</li>
-                <li>Git</li>
-                <li>Responsive Design</li>
-              </ul>
-            </div>
+          <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-bold">Skills & Tools</h2>
+            {isAdmin && !isEditingSkills && (
+              <Button
+                onClick={() => setIsEditingSkills(true)}
+                variant="outline"
+                size="sm"
+              >
+                <EditIcon className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+            )}
           </div>
+
+          {isEditingSkills ? (
+            <div className="space-y-6">
+              <div className="grid md:grid-cols-3 gap-8">
+                {Object.entries(skillsData).map(([category, items]) => (
+                  <div key={category} className="space-y-3">
+                    <h3 className="font-semibold text-lg capitalize">{category}</h3>
+                    <div className="space-y-2">
+                      {items.map((item, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            value={item}
+                            onChange={(e) => updateSkillItem(category as keyof typeof skillsData, index, e.target.value)}
+                            className="flex-1"
+                            placeholder="Enter skill"
+                          />
+                          <Button
+                            onClick={() => removeSkillItem(category as keyof typeof skillsData, index)}
+                            variant="outline"
+                            size="sm"
+                            className="px-2"
+                          >
+                            <MinusIcon className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        onClick={() => addSkillItem(category as keyof typeof skillsData)}
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                      >
+                        <PlusIcon className="h-4 w-4 mr-2" />
+                        Add {category} skill
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={handleSaveSkills}>
+                  <SaveIcon className="h-4 w-4 mr-2" />
+                  Save Changes
+                </Button>
+                <Button onClick={handleCancelSkills} variant="outline">
+                  <XIcon className="h-4 w-4 mr-2" />
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {Object.entries(skillsData).map(([category, items]) => (
+                <div key={category} className="space-y-3">
+                  <h3 className="font-semibold text-lg capitalize">{category}</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    {items.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

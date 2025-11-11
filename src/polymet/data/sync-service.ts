@@ -1,3 +1,5 @@
+import { storageService } from './storage-service';
+
 // Service to sync data to GitHub via Netlify function
 export const syncToGitHub = async (data: any, message: string = 'Update content'): Promise<boolean> => {
   // Only sync in production
@@ -33,30 +35,95 @@ export const syncToGitHub = async (data: any, message: string = 'Update content'
   }
 };
 
-// Export all data for GitHub sync
-export const exportAllData = () => {
+// Upload image to Netlify Blobs
+const uploadImageToNetlifyBlobs = async (imageId: string, dataUrl: string): Promise<string | null> => {
+  try {
+    console.log(`[uploadImageToNetlifyBlobs] Uploading ${imageId}...`);
+    
+    const response = await fetch('/.netlify/functions/upload-image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        imageId,
+        imageData: dataUrl,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`[uploadImageToNetlifyBlobs] Failed to upload ${imageId}: ${response.status}`);
+      return null;
+    }
+
+    const result = await response.json();
+    console.log(`[uploadImageToNetlifyBlobs] ✅ Uploaded ${imageId} -> ${result.url}`);
+    return result.url;
+  } catch (error) {
+    console.error(`[uploadImageToNetlifyBlobs] Error uploading ${imageId}:`, error);
+    return null;
+  }
+};
+
+// Replace indexeddb: references with Netlify Blob URLs
+const replaceIndexedDBReferences = async (obj: any): Promise<any> => {
+  if (typeof obj === 'string' && obj.startsWith('indexeddb:')) {
+    const imageId = obj.replace('indexeddb:', '');
+    const dataUrl = await storageService.getImage(imageId);
+    
+    if (dataUrl) {
+      const blobUrl = await uploadImageToNetlifyBlobs(imageId, dataUrl);
+      return blobUrl || obj; // Return original if upload fails
+    }
+    return obj;
+  }
+  
+  if (Array.isArray(obj)) {
+    const results = await Promise.all(obj.map(item => replaceIndexedDBReferences(item)));
+    return results;
+  }
+  
+  if (obj && typeof obj === 'object') {
+    const result: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      result[key] = await replaceIndexedDBReferences(value);
+    }
+    return result;
+  }
+  
+  return obj;
+};
+
+// Export all data for GitHub sync (now async to handle Netlify Blobs)
+export const exportAllData = async (): Promise<any> => {
+  console.log('[exportAllData] Starting data export with Netlify Blobs upload...');
+  
   const data: any = {
     timestamp: new Date().toISOString(),
-    projects: {},
+    projects: [],
     about: {},
     home: {},
   };
 
-  // Export projects data
+  // Export projects data and upload images
   try {
     const projectsData = localStorage.getItem('portfolio_projects_data');
     if (projectsData) {
-      data.projects = JSON.parse(projectsData);
+      const projects = JSON.parse(projectsData);
+      console.log('[exportAllData] Processing projects for Netlify Blobs upload...');
+      data.projects = await replaceIndexedDBReferences(projects);
     }
   } catch (error) {
     console.error('[exportAllData] Error exporting projects:', error);
   }
 
-  // Export about data
+  // Export about data and upload images
   try {
     const aboutData = localStorage.getItem('portfolio_about_data');
     if (aboutData) {
-      data.about = JSON.parse(aboutData);
+      const about = JSON.parse(aboutData);
+      console.log('[exportAllData] Processing about data for Netlify Blobs upload...');
+      data.about = await replaceIndexedDBReferences(about);
     }
   } catch (error) {
     console.error('[exportAllData] Error exporting about:', error);
@@ -72,5 +139,6 @@ export const exportAllData = () => {
     console.error('[exportAllData] Error exporting home:', error);
   }
 
+  console.log('[exportAllData] ✅ Data export complete with Netlify Blobs URLs');
   return data;
 };

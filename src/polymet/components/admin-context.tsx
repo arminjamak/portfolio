@@ -42,11 +42,11 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     // Sync all data to GitHub before logging out
     try {
-      console.log('[Admin Logout] Syncing data to GitHub...');
-      const allData = exportAllData();
-      const success = await syncToGitHub(allData, 'Update content from admin session');
+      console.log('[Admin Logout] Uploading images to Netlify Blobs and syncing to GitHub...');
+      const allData = await exportAllData(); // Now async to handle Netlify Blobs upload
+      const success = await syncToGitHub(allData, 'Update content from admin session with Netlify Blobs');
       if (success) {
-        console.log('[Admin Logout] ✅ Data synced successfully!');
+        console.log('[Admin Logout] ✅ Data synced successfully with persistent images!');
       } else {
         console.error('[Admin Logout] ⚠️ Failed to sync data');
       }
