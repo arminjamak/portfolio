@@ -159,7 +159,7 @@ export function ContentEditor({
         // Try to upload to Cloudflare R2 immediately
         try {
           const imageId = `content-${blockId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          const response = await fetch('/.netlify/functions/upload-to-r2', {
+          const response = await fetch('/.netlify/functions/upload-to-r2-simple', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
