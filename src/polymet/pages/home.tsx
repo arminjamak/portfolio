@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { PlusIcon, RotateCcwIcon, EditIcon, SaveIcon, XIcon } from "lucide-react";
 import { fixBrokenProjects } from "@/polymet/data/fix-projects";
+import { clearOldImageData } from "@/polymet/data/clear-old-data";
 
 export function Home() {
   const { isAdmin } = useAdmin();
