@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { PlusIcon, RotateCcwIcon, EditIcon, SaveIcon, XIcon } from "lucide-react";
+import { fixBrokenProjects } from "@/polymet/data/fix-projects";
 
 export function Home() {
   const { isAdmin } = useAdmin();
@@ -29,6 +30,13 @@ export function Home() {
   // Load projects and home data on mount
   useEffect(() => {
     const loadData = async () => {
+      // Fix any broken IndexedDB references first
+      try {
+        await fixBrokenProjects();
+      } catch (error) {
+        console.warn('[Home] Failed to fix broken projects:', error);
+      }
+      
       const loadedProjects = await getProjects();
       setProjects(loadedProjects);
       const homeData = getHomeData();
