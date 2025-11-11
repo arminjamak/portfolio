@@ -20,13 +20,30 @@ export const migrateBase64ImagesToBlobs = async (): Promise<void> => {
     // Now migrate any IndexedDB images that were loaded
     console.log('[Migration] Checking for IndexedDB images to migrate...');
     
-    // Get all images from IndexedDB
-    const dbRequest = indexedDB.open('PortfolioImages', 1);
+    // Get all images from IndexedDB - use correct database name
+    const dbRequest = indexedDB.open('PortfolioStorage', 1);
     
     dbRequest.onsuccess = async (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction(['images'], 'readonly');
-      const store = transaction.objectStore('images');
+      console.log('[Migration] Available object stores:', Array.from(db.objectStoreNames));
+      
+      // Try different possible store names
+      let storeName = 'images';
+      if (!db.objectStoreNames.contains('images')) {
+        if (db.objectStoreNames.contains('portfolioImages')) {
+          storeName = 'portfolioImages';
+        } else if (db.objectStoreNames.length > 0) {
+          storeName = db.objectStoreNames[0];
+        } else {
+          console.log('[Migration] No object stores found in IndexedDB');
+          alert('No images found in IndexedDB to migrate.');
+          return;
+        }
+      }
+      
+      console.log(`[Migration] Using object store: ${storeName}`);
+      const transaction = db.transaction([storeName], 'readonly');
+      const store = transaction.objectStore(storeName);
       const getAllRequest = store.getAll();
       
       getAllRequest.onsuccess = async () => {
