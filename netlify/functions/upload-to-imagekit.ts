@@ -36,9 +36,13 @@ export default async (request: Request, context: Context) => {
     const fileExtension = mimeMatch ? mimeMatch[1] : 'jpg';
     console.log(`[upload-to-imagekit] Detected file type: ${fileExtension}`);
 
-    // Create form data for ImageKit upload - send base64 directly
+    // Convert base64 to buffer for proper file upload
+    const base64Data = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
+    const buffer = Buffer.from(base64Data, 'base64');
+    
+    // Create form data for ImageKit upload
     const formData = new FormData();
-    formData.append('file', imageData); // Send base64 directly
+    formData.append('file', new Blob([buffer], { type: `image/${fileExtension}` }), `${imageId}.${fileExtension}`);
     formData.append('fileName', `${imageId}.${fileExtension}`);
     formData.append('folder', '/portfolio');
     formData.append('useUniqueFileName', 'false');
