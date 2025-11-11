@@ -138,7 +138,7 @@ export function ContentEditor({
   };
 
   const handleImageUpload = async (blockId: string, file: File) => {
-    // Check file size (limit to 20MB for IndexedDB storage)
+    // Check file size (limit to 20MB for Netlify Blobs)
     const maxSize = 20 * 1024 * 1024; // 20MB
     if (file.size > maxSize) {
       alert(
@@ -151,9 +151,41 @@ export function ContentEditor({
     setUploadingBlocks((prev) => new Set(prev).add(blockId));
 
     try {
+      // Convert file to base64 first
       const reader = new FileReader();
-      reader.onloadend = () => {
-        updateBlock(blockId, { content: reader.result as string });
+      reader.onloadend = async () => {
+        const dataUrl = reader.result as string;
+        
+        // Try to upload to Netlify Blobs immediately
+        try {
+          const imageId = `content-${blockId}-${Date.now()}`;
+          const response = await fetch('/.netlify/functions/upload-image', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              imageId,
+              imageData: dataUrl,
+            }),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            console.log(`[ContentEditor] ✅ Uploaded to Netlify Blobs: ${result.url}`);
+            // Use the Netlify Blob URL instead of base64
+            updateBlock(blockId, { content: result.url });
+          } else {
+            console.warn(`[ContentEditor] Failed to upload to Netlify Blobs, using base64 fallback`);
+            // Fallback to base64 if Netlify Blobs fails
+            updateBlock(blockId, { content: dataUrl });
+          }
+        } catch (error) {
+          console.warn(`[ContentEditor] Error uploading to Netlify Blobs, using base64 fallback:`, error);
+          // Fallback to base64 if Netlify Blobs fails
+          updateBlock(blockId, { content: dataUrl });
+        }
+        
         // Remove from uploading set
         setUploadingBlocks((prev) => {
           const newSet = new Set(prev);
@@ -161,6 +193,7 @@ export function ContentEditor({
           return newSet;
         });
       };
+      
       reader.onerror = () => {
         alert("Error reading file. Please try again.");
         setUploadingBlocks((prev) => {
@@ -169,9 +202,11 @@ export function ContentEditor({
           return newSet;
         });
       };
+      
       reader.readAsDataURL(file);
     } catch (error) {
-      alert("Error uploading file. Please try again.");
+      console.error("Error uploading image:", error);
+      alert("Error uploading image. Please try again.");
       setUploadingBlocks((prev) => {
         const newSet = new Set(prev);
         newSet.delete(blockId);

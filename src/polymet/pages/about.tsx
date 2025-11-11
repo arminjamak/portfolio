@@ -56,8 +56,39 @@ export function About() {
     setIsUploading(true);
     try {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setTempImageUrl(reader.result as string);
+      reader.onloadend = async () => {
+        const dataUrl = reader.result as string;
+        
+        // Try to upload to Netlify Blobs immediately
+        try {
+          const imageId = `about-profile-${Date.now()}`;
+          const response = await fetch('/.netlify/functions/upload-image', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              imageId,
+              imageData: dataUrl,
+            }),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            console.log(`[AboutPage] ✅ Uploaded profile image to Netlify Blobs: ${result.url}`);
+            // Use the Netlify Blob URL instead of base64
+            setTempImageUrl(result.url);
+          } else {
+            console.warn(`[AboutPage] Failed to upload to Netlify Blobs, using base64 fallback`);
+            // Fallback to base64 if Netlify Blobs fails
+            setTempImageUrl(dataUrl);
+          }
+        } catch (error) {
+          console.warn(`[AboutPage] Error uploading to Netlify Blobs, using base64 fallback:`, error);
+          // Fallback to base64 if Netlify Blobs fails
+          setTempImageUrl(dataUrl);
+        }
+        
         setIsUploading(false);
       };
       reader.onerror = () => {

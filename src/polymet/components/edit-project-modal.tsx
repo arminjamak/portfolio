@@ -70,7 +70,7 @@ export function EditProjectModal({
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Check file size (limit to 20MB for IndexedDB storage)
+      // Check file size (limit to 20MB for Netlify Blobs)
       const maxSize = 20 * 1024 * 1024; // 20MB
       if (file.size > maxSize) {
         alert(
@@ -82,8 +82,39 @@ export function EditProjectModal({
       setIsUploading(true);
       try {
         const reader = new FileReader();
-        reader.onloadend = () => {
-          setThumbnail(reader.result as string);
+        reader.onloadend = async () => {
+          const dataUrl = reader.result as string;
+          
+          // Try to upload to Netlify Blobs immediately
+          try {
+            const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}`;
+            const response = await fetch('/.netlify/functions/upload-image', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                imageId,
+                imageData: dataUrl,
+              }),
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log(`[EditProjectModal] ✅ Uploaded thumbnail to Netlify Blobs: ${result.url}`);
+              // Use the Netlify Blob URL instead of base64
+              setThumbnail(result.url);
+            } else {
+              console.warn(`[EditProjectModal] Failed to upload to Netlify Blobs, using base64 fallback`);
+              // Fallback to base64 if Netlify Blobs fails
+              setThumbnail(dataUrl);
+            }
+          } catch (error) {
+            console.warn(`[EditProjectModal] Error uploading to Netlify Blobs, using base64 fallback:`, error);
+            // Fallback to base64 if Netlify Blobs fails
+            setThumbnail(dataUrl);
+          }
+          
           setIsUploading(false);
         };
         reader.onerror = () => {
