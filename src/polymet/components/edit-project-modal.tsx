@@ -108,9 +108,13 @@ export function EditProjectModal({
             
             if (response.ok) {
               const result = await response.json();
-              console.log(`[EditProjectModal] ✅ Uploaded thumbnail to ImageKit: ${result.resizedUrl}`);
-              // Use the Cloudflare R2 resized URL instead of base64
-              setThumbnail(result.resizedUrl);
+              if (result.success && result.url) {
+                console.log(`[EditProjectModal] ✅ Uploaded thumbnail to ImageKit: ${result.resizedUrl}`);
+                setThumbnail(result.resizedUrl);
+              } else {
+                console.warn(`[EditProjectModal] Invalid image data skipped, using base64 fallback`);
+                setThumbnail(dataUrl);
+              }
             } else {
               const errorText = await response.text();
               console.warn(`[EditProjectModal] Upload failed: ${errorText}, falling back to base64`);

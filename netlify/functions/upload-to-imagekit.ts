@@ -12,6 +12,22 @@ export default async (request: Request, context: Context) => {
       return new Response('Missing imageId or imageData', { status: 400 });
     }
 
+    // Skip if it's an IndexedDB reference or invalid data
+    if (imageData.startsWith('indexeddb:') || !imageData.startsWith('data:image/')) {
+      console.log(`[upload-to-imagekit] Skipping invalid image data: ${imageData.substring(0, 50)}...`);
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Invalid image data format',
+        imageId,
+        originalUrl: '',
+        resizedUrl: '',
+        url: '', // Return empty URL for invalid data
+      }), {
+        status: 200, // Return 200 but with empty URL
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     console.log(`[upload-to-imagekit] Uploading ${imageId}...`);
 
     // Check required environment variables
