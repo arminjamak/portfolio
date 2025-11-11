@@ -76,7 +76,9 @@ export default async (request: Request, context: Context) => {
 
     // ImageKit provides automatic optimization through URL transformations
     const originalUrl = result.url;
-    const optimizedUrl = `${urlEndpoint}/tr:w-1200,q-85,f-auto/${result.filePath}`;
+    // Remove leading slash from filePath to avoid double slashes
+    const cleanFilePath = result.filePath.startsWith('/') ? result.filePath.slice(1) : result.filePath;
+    const optimizedUrl = `${urlEndpoint}/tr:w-1200,q-85,f-auto/${cleanFilePath}`;
 
     console.log(`[upload-to-imagekit] Generated URLs:`);
     console.log(`[upload-to-imagekit] - Original: ${originalUrl}`);
