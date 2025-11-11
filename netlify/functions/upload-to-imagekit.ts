@@ -29,11 +29,17 @@ export default async (request: Request, context: Context) => {
     }
 
     console.log(`[upload-to-imagekit] Processing image data...`);
+    console.log(`[upload-to-imagekit] Image data preview:`, imageData.substring(0, 100) + '...');
+
+    // Extract file extension from base64 data
+    const mimeMatch = imageData.match(/^data:image\/([a-zA-Z0-9]+);base64,/);
+    const fileExtension = mimeMatch ? mimeMatch[1] : 'jpg';
+    console.log(`[upload-to-imagekit] Detected file type: ${fileExtension}`);
 
     // Create form data for ImageKit upload - send base64 directly
     const formData = new FormData();
     formData.append('file', imageData); // Send base64 directly
-    formData.append('fileName', `${imageId}`);
+    formData.append('fileName', `${imageId}.${fileExtension}`);
     formData.append('folder', '/portfolio');
     formData.append('useUniqueFileName', 'false');
     
@@ -44,6 +50,14 @@ export default async (request: Request, context: Context) => {
     const uploadUrl = 'https://upload.imagekit.io/api/v1/files/upload';
     
     console.log(`[upload-to-imagekit] Uploading to ImageKit...`);
+    console.log(`[upload-to-imagekit] Form data entries:`);
+    for (const [key, value] of formData.entries()) {
+      if (key === 'file') {
+        console.log(`[upload-to-imagekit] - ${key}: ${typeof value === 'string' ? value.substring(0, 50) + '...' : value}`);
+      } else {
+        console.log(`[upload-to-imagekit] - ${key}: ${value}`);
+      }
+    }
     
     const imagekitResponse = await fetch(uploadUrl, {
       method: 'POST',
