@@ -64,7 +64,7 @@ export function About() {
           const imageId = `about-profile-image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
           console.log(`[About] Attempting to upload ${imageId} to Cloudflare R2...`);
           
-          const response = await fetch('/.netlify/functions/upload-to-r2-real', {
+          const response = await fetch('/.netlify/functions/upload-to-r2-basic', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
