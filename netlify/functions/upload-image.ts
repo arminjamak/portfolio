@@ -1,22 +1,24 @@
 import { getStore } from '@netlify/blobs';
+import type { Context } from '@netlify/functions';
 
-export const handler = async (event: any) => {
+export default async (request: Request, context: Context) => {
   // Only allow POST requests
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' }),
-    };
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   try {
-    const { imageData, imageId } = JSON.parse(event.body || '{}');
+    const body = await request.text();
+    const { imageData, imageId } = JSON.parse(body || '{}');
     
     if (!imageData || !imageId) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Missing imageData or imageId' }),
-      };
+      return new Response(JSON.stringify({ error: 'Missing imageData or imageId' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     console.log(`[upload-image] Starting upload for ${imageId}`);
@@ -50,22 +52,22 @@ export const handler = async (event: any) => {
     
     console.log(`[upload-image] Uploaded image: ${imageId} (${(buffer.length / 1024).toFixed(0)}KB)`);
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        success: true,
-        imageId,
-        url: blobUrl,
-      }),
-    };
+    return new Response(JSON.stringify({
+      success: true,
+      imageId,
+      url: blobUrl,
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Error uploading image:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: 'Internal server error',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      }),
-    };
+    return new Response(JSON.stringify({
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error',
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 };
