@@ -51,11 +51,21 @@ export const migrateBase64ImagesToBlobs = async (): Promise<void> => {
         console.log(`[Migration] Found ${allImages.length} images in IndexedDB`);
         
         let migratedCount = 0;
+        let skippedCount = 0;
+        
         for (const imageRecord of allImages) {
           try {
-            console.log(`[Migration] Migrating ${imageRecord.id} (${(imageRecord.dataUrl.length / 1024 / 1024).toFixed(1)}MB)...`);
+            const sizeInMB = imageRecord.dataUrl.length / 1024 / 1024;
+            console.log(`[Migration] Migrating ${imageRecord.id} (${sizeInMB.toFixed(1)}MB)...`);
             
-            const imageId = `migrated-${imageRecord.id}-${Date.now()}`;
+            // Skip extremely large images (>10MB) that cause function timeouts
+            if (sizeInMB > 10) {
+              console.warn(`[Migration] ⚠️ Skipping ${imageRecord.id} - too large (${sizeInMB.toFixed(1)}MB)`);
+              skippedCount++;
+              continue;
+            }
+            
+            const imageId = `migrated-${imageRecord.id}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
             const uploadResponse = await fetch('/.netlify/functions/upload-image', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -87,10 +97,20 @@ export const migrateBase64ImagesToBlobs = async (): Promise<void> => {
           } catch (error) {
             console.warn(`[Migration] Failed to migrate ${imageRecord.id}:`, error);
           }
+          
+          // Add small delay between uploads to avoid overwhelming the function
+          await new Promise(resolve => setTimeout(resolve, 500));
         }
         
-        console.log(`[Migration] 🎉 Migration complete! Migrated ${migratedCount}/${allImages.length} images`);
-        alert(`✅ Migration complete!\n\n${migratedCount} images migrated to Netlify Blobs.\nStorage quota issue should be fixed.\n\nRefresh the page to see the results.`);
+        console.log(`[Migration] 🎉 Migration complete! Migrated ${migratedCount}/${allImages.length} images (${skippedCount} skipped due to size)`);
+        
+        let message = `✅ Migration complete!\n\n${migratedCount} images migrated to Netlify Blobs.`;
+        if (skippedCount > 0) {
+          message += `\n${skippedCount} very large images (>10MB) were skipped to avoid timeouts.`;
+        }
+        message += `\n\nStorage quota issue should be fixed.\nRefresh the page to see the results.`;
+        
+        alert(message);
       };
     };
     
