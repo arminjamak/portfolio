@@ -46,9 +46,23 @@ export default async (request: Request, context: Context) => {
     });
     console.log(`[upload-image] Successfully uploaded to store`);
     
-    // Generate the blob URL using the site URL
-    const siteUrl = process.env.URL || 'https://armin.work';
-    const blobUrl = `${siteUrl}/.netlify/blobs/get/portfolio-images/${imageId}`;
+    // Generate the blob URL - try to get it from the store metadata
+    let blobUrl;
+    try {
+      // Try to get the actual blob URL from the store
+      const metadata = await store.getMetadata(imageId);
+      console.log(`[upload-image] Blob metadata:`, metadata);
+      
+      // Use our custom get-image function
+      const siteUrl = process.env.URL || 'https://armin.work';
+      blobUrl = `${siteUrl}/.netlify/functions/get-image?id=${imageId}`;
+      
+      console.log(`[upload-image] Generated custom blob URL: ${blobUrl}`);
+    } catch (error) {
+      console.warn(`[upload-image] Could not get metadata:`, error);
+      const siteUrl = process.env.URL || 'https://armin.work';
+      blobUrl = `${siteUrl}/.netlify/functions/get-image?id=${imageId}`;
+    }
     
     console.log(`[upload-image] Uploaded image: ${imageId} (${(buffer.length / 1024).toFixed(0)}KB)`);
 
