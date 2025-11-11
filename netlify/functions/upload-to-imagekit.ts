@@ -100,6 +100,27 @@ export default async (request: Request, context: Context) => {
 
     console.log(`[upload-to-imagekit] Processing image data...`);
     console.log(`[upload-to-imagekit] Image data preview:`, imageData.substring(0, 100) + '...');
+    
+    // Check file size (base64 is ~33% larger than original)
+    const fileSizeBytes = (imageData.length * 0.75);
+    const fileSizeMB = fileSizeBytes / (1024 * 1024);
+    console.log(`[upload-to-imagekit] Estimated file size: ${fileSizeMB.toFixed(2)}MB`);
+    
+    // ImageKit has a 25MB limit, but Netlify functions have memory/timeout limits
+    if (fileSizeMB > 20) {
+      console.log(`[upload-to-imagekit] File too large: ${fileSizeMB.toFixed(2)}MB`);
+      return new Response(JSON.stringify({
+        success: false,
+        error: `File too large: ${fileSizeMB.toFixed(2)}MB. Maximum supported: 20MB`,
+        imageId,
+        originalUrl: '',
+        resizedUrl: '',
+        url: '',
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     // Extract file extension from base64 data
     const mimeMatch = imageData.match(/^data:image\/([a-zA-Z0-9]+);base64,/);
@@ -134,18 +155,25 @@ export default async (request: Request, context: Context) => {
     
     let imagekitResponse;
     try {
-      imagekitResponse = await fetch(uploadUrl, {
+      // Add timeout to prevent function hanging
+      const uploadPromise = fetch(uploadUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${auth}`,
         },
         body: formData,
       });
+      
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Upload timeout after 25 seconds')), 25000)
+      );
+      
+      imagekitResponse = await Promise.race([uploadPromise, timeoutPromise]) as Response;
     } catch (fetchError) {
       console.error(`[upload-to-imagekit] Fetch error:`, fetchError);
       return new Response(JSON.stringify({
         success: false,
-        error: 'Network error during upload',
+        error: `Upload failed: ${fetchError instanceof Error ? fetchError.message : 'Unknown error'}`,
         imageId,
         originalUrl: '',
         resizedUrl: '',
