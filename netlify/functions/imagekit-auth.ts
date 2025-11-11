@@ -41,9 +41,21 @@ export default async (request: Request, context: Context) => {
     const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const expire = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
     
-    // Create signature string for ImageKit authentication
-    const signatureString = `token=${token}&expire=${expire}`;
-    const signature = createHmac('sha1', privateKey).update(signatureString).digest('hex');
+    // Create signature according to ImageKit documentation
+    // For client-side uploads, we need to include the parameters that will be sent
+    const folder = '/portfolio';
+    const useUniqueFileName = 'true'; // Let ImageKit handle unique names
+    
+    // Build the signature string with all parameters that will be sent
+    const signatureParams = [
+      `expire=${expire}`,
+      `folder=${folder}`,
+      `publicKey=${publicKey}`,
+      `token=${token}`,
+      `useUniqueFileName=${useUniqueFileName}`
+    ].sort().join('&'); // Sort parameters alphabetically
+    
+    const signature = createHmac('sha1', privateKey).update(signatureParams).digest('hex');
     
     console.log(`[imagekit-auth] Generated auth for ${fileName} (expires in 1 hour)`);
     

@@ -45,6 +45,7 @@ export async function uploadToImageKitClient(
     const { publicKey, signature, expire, token } = await authResponse.json();
     
     // Create form data for direct upload to ImageKit
+    // Must match exactly what was used to generate the signature
     const formData = new FormData();
     formData.append('file', file);
     formData.append('fileName', `${imageId}.${getFileExtension(file)}`);
@@ -53,6 +54,7 @@ export async function uploadToImageKitClient(
     formData.append('signature', signature);
     formData.append('expire', expire.toString());
     formData.append('token', token);
+    formData.append('useUniqueFileName', 'true'); // Must match signature generation
 
     console.log(`[ImageKit Client] Uploading ${fileSizeMB.toFixed(2)}MB directly to ImageKit...`);
     
