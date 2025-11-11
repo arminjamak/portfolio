@@ -93,7 +93,8 @@ export function EditProjectModal({
             const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             console.log(`[EditProjectModal] Force uploading fresh file ${imageId} to ImageKit...`);
             
-            const response = await fetch('/.netlify/functions/upload-to-imagekit-simple', {
+            // Add timeout protection
+            const uploadPromise = fetch('/.netlify/functions/upload-to-imagekit-simple', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -103,6 +104,12 @@ export function EditProjectModal({
                 imageData: dataUrl,
               }),
             });
+            
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Upload timeout after 30 seconds')), 30000)
+            );
+            
+            const response = await Promise.race([uploadPromise, timeoutPromise]) as Response;
             
             console.log(`[EditProjectModal] Upload response status: ${response.status}`);
             
