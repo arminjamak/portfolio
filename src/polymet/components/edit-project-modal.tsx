@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Project } from "@/polymet/data/projects-data";
 import { SaveIcon, TrashIcon, UploadIcon, LoaderIcon } from "lucide-react";
+import { uploadToImageKitDirect } from "@/polymet/utils/imagekit-direct";
 
 interface EditProjectModalProps {
   open: boolean;
@@ -71,81 +72,42 @@ export function EditProjectModal({
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // Check file size (limit to 20MB for Netlify Blobs)
-      const maxSize = 20 * 1024 * 1024; // 20MB
-      if (file.size > maxSize) {
-        alert(
-          `File size is ${(file.size / 1024 / 1024).toFixed(2)}MB. Maximum file size is 20MB. For larger files, please use an external URL like Squarespace CDN or Framer.`
-        );
-        return;
-      }
+    if (!file) return;
 
-      setIsUploading(true);
-      try {
+    setIsUploading(true);
+    
+    try {
+      // Generate unique ID for upload
+      const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      console.log(`[EditProjectModal] Direct uploading ${imageId} to ImageKit (${(file.size / 1024 / 1024).toFixed(2)}MB)...`);
+      
+      // Use direct ImageKit upload (no Netlify Function limits)
+      const result = await uploadToImageKitDirect(file, imageId);
+      
+      if (result.success && result.url) {
+        console.log(`[EditProjectModal] ✅ Direct upload successful: ${result.resizedUrl}`);
+        setThumbnail(result.resizedUrl);
+      } else {
+        console.warn(`[EditProjectModal] Direct upload failed: ${result.error}`);
+        // Fallback to base64 for display
         const reader = new FileReader();
-        reader.onloadend = async () => {
-          const dataUrl = reader.result as string;
-          
-          // ALWAYS upload to ImageKit for every file selection, regardless of previous state
-          try {
-            // Always generate a unique ID for new uploads
-            const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            console.log(`[EditProjectModal] Force uploading fresh file ${imageId} to ImageKit...`);
-            
-            // Add timeout protection
-            const uploadPromise = fetch('/.netlify/functions/upload-to-imagekit-simple', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                imageId,
-                imageData: dataUrl,
-              }),
-            });
-            
-            const timeoutPromise = new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Upload timeout after 60 seconds')), 60000)
-            );
-            
-            const response = await Promise.race([uploadPromise, timeoutPromise]) as Response;
-            
-            console.log(`[EditProjectModal] Upload response status: ${response.status}`);
-            
-            if (response.ok) {
-              const result = await response.json();
-              if (result.success && result.url) {
-                console.log(`[EditProjectModal] ✅ Uploaded thumbnail to ImageKit: ${result.resizedUrl}`);
-                setThumbnail(result.resizedUrl);
-              } else {
-                console.warn(`[EditProjectModal] Invalid image data skipped, using base64 fallback`);
-                setThumbnail(dataUrl);
-              }
-            } else {
-              const errorText = await response.text();
-              console.warn(`[EditProjectModal] Upload failed: ${errorText}, falling back to base64`);
-              // Fallback to base64 if upload fails
-              setThumbnail(dataUrl);
-            }
-          } catch (uploadError) {
-            console.error(`[EditProjectModal] Upload error:`, uploadError);
-            // Fallback to base64 if upload fails
-            setThumbnail(dataUrl);
-          }
-          
-          setIsUploading(false);
-        };
-        reader.onerror = () => {
-          alert("Error reading file. Please try again.");
-          setIsUploading(false);
+        reader.onloadend = () => {
+          setThumbnail(reader.result as string);
         };
         reader.readAsDataURL(file);
-      } catch (error) {
-        alert("Error uploading file. Please try again.");
-        setIsUploading(false);
       }
+      
+    } catch (error) {
+      console.error(`[EditProjectModal] Direct upload error:`, error);
+      // Fallback to base64 for display
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnail(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
+    
+    setIsUploading(false);
   };
 
   return (
