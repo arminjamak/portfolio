@@ -93,7 +93,7 @@ export function EditProjectModal({
             const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             console.log(`[EditProjectModal] Attempting to upload ${imageId} to Cloudflare R2...`);
             
-            const response = await fetch('/.netlify/functions/upload-to-r2-simple', {
+            const response = await fetch('/.netlify/functions/upload-to-r2-real', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
