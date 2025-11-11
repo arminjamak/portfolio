@@ -106,7 +106,7 @@ export function EditProjectModal({
             });
             
             const timeoutPromise = new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Upload timeout after 30 seconds')), 30000)
+              setTimeout(() => reject(new Error('Upload timeout after 60 seconds')), 60000)
             );
             
             const response = await Promise.race([uploadPromise, timeoutPromise]) as Response;
