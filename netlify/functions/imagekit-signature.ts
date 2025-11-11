@@ -40,8 +40,8 @@ export default async (request: Request, context: Context) => {
     const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const expire = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
     
-    // Create signature string
-    const signatureString = `token=${token}&expire=${expire}&privateKey=${privateKey}`;
+    // Create signature string according to ImageKit docs
+    const signatureString = `token=${token}&expire=${expire}`;
     const signature = createHmac('sha1', privateKey).update(signatureString).digest('hex');
     
     console.log(`[imagekit-signature] Generated signature for ${fileName}`);
