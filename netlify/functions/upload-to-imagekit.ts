@@ -28,16 +28,12 @@ export default async (request: Request, context: Context) => {
       return new Response('Missing ImageKit credentials', { status: 500 });
     }
 
-    // Convert base64 to buffer
-    const base64Data = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
-    const buffer = Buffer.from(base64Data, 'base64');
-    
-    console.log(`[upload-to-imagekit] Buffer size: ${buffer.length} bytes (${(buffer.length / 1024 / 1024).toFixed(1)}MB)`);
+    console.log(`[upload-to-imagekit] Processing image data...`);
 
-    // Create form data for ImageKit upload
+    // Create form data for ImageKit upload - send base64 directly
     const formData = new FormData();
-    formData.append('file', new Blob([buffer]), `${imageId}.jpg`);
-    formData.append('fileName', `${imageId}.jpg`);
+    formData.append('file', imageData); // Send base64 directly
+    formData.append('fileName', `${imageId}`);
     formData.append('folder', '/portfolio');
     formData.append('useUniqueFileName', 'false');
     
@@ -57,9 +53,21 @@ export default async (request: Request, context: Context) => {
       body: formData,
     });
 
+    console.log(`[upload-to-imagekit] Response status: ${imagekitResponse.status}`);
+    console.log(`[upload-to-imagekit] Response headers:`, Object.fromEntries(imagekitResponse.headers.entries()));
+
     if (!imagekitResponse.ok) {
       const errorText = await imagekitResponse.text();
       console.error(`[upload-to-imagekit] Upload failed (${imagekitResponse.status}):`, errorText);
+      
+      // Try to parse error details
+      try {
+        const errorJson = JSON.parse(errorText);
+        console.error(`[upload-to-imagekit] Error details:`, errorJson);
+      } catch (e) {
+        console.error(`[upload-to-imagekit] Raw error:`, errorText);
+      }
+      
       return new Response(`ImageKit upload failed: ${errorText}`, { status: 500 });
     }
 
