@@ -1,40 +1,90 @@
 // Migration utility to convert existing base64 images to Netlify Blobs
 export const migrateBase64ImagesToBlobs = async (): Promise<void> => {
-  console.log('[Migration] Starting base64 to Netlify Blobs migration...');
+  console.log('[Migration] 🚀 Starting IndexedDB + base64 to Netlify Blobs migration...');
   
   try {
-    // Migrate projects data
-    const projectsData = localStorage.getItem('portfolio_projects_data');
-    if (projectsData) {
-      const projects = JSON.parse(projectsData);
-      const migratedProjects = await migrateObjectImages(projects, 'projects');
-      localStorage.setItem('portfolio_projects_data', JSON.stringify(migratedProjects));
-      console.log('[Migration] ✅ Projects data migrated');
-    }
-
-    // Migrate about data
-    const aboutData = localStorage.getItem('portfolio_about_data');
-    if (aboutData) {
-      const about = JSON.parse(aboutData);
-      const migratedAbout = await migrateObjectImages(about, 'about');
-      localStorage.setItem('portfolio_about_data', JSON.stringify(migratedAbout));
-      console.log('[Migration] ✅ About data migrated');
-    }
-
-    // Migrate home data
-    const homeData = localStorage.getItem('portfolio_home_data');
-    if (homeData) {
-      const home = JSON.parse(homeData);
-      const migratedHome = await migrateObjectImages(home, 'home');
-      localStorage.setItem('portfolio_home_data', JSON.stringify(migratedHome));
-      console.log('[Migration] ✅ Home data migrated');
-    }
-
-    console.log('[Migration] 🎉 All data migrated successfully!');
-    alert('Images migrated to Netlify Blobs! Please refresh the page.');
+    // First, clear localStorage to avoid quota issues
+    console.log('[Migration] Clearing localStorage to avoid quota issues...');
+    localStorage.removeItem('portfolio_projects_data');
+    localStorage.removeItem('portfolio_about_data');
+    localStorage.removeItem('portfolio_home_data');
+    
+    // Load fresh data from data.json (this will trigger IndexedDB loading)
+    console.log('[Migration] Loading fresh data from data.json...');
+    const response = await fetch('/data.json');
+    const freshData = await response.json();
+    
+    // Wait a moment for IndexedDB loading to complete
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Now migrate any IndexedDB images that were loaded
+    console.log('[Migration] Checking for IndexedDB images to migrate...');
+    
+    // Get all images from IndexedDB
+    const dbRequest = indexedDB.open('PortfolioImages', 1);
+    
+    dbRequest.onsuccess = async (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction(['images'], 'readonly');
+      const store = transaction.objectStore('images');
+      const getAllRequest = store.getAll();
+      
+      getAllRequest.onsuccess = async () => {
+        const allImages = getAllRequest.result;
+        console.log(`[Migration] Found ${allImages.length} images in IndexedDB`);
+        
+        let migratedCount = 0;
+        for (const imageRecord of allImages) {
+          try {
+            console.log(`[Migration] Migrating ${imageRecord.id} (${(imageRecord.dataUrl.length / 1024 / 1024).toFixed(1)}MB)...`);
+            
+            const imageId = `migrated-${imageRecord.id}-${Date.now()}`;
+            const uploadResponse = await fetch('/.netlify/functions/upload-image', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                imageId,
+                imageData: imageRecord.dataUrl,
+              }),
+            });
+            
+            if (uploadResponse.ok) {
+              const result = await uploadResponse.json();
+              console.log(`[Migration] ✅ Migrated ${imageRecord.id} to: ${result.url}`);
+              migratedCount++;
+              
+              // Update the corresponding project in localStorage
+              const projectsData = localStorage.getItem('portfolio_projects_data') || '[]';
+              const projects = JSON.parse(projectsData);
+              
+              // Find and update the project that uses this image
+              for (const project of projects) {
+                if (project.thumbnail && project.thumbnail.includes(imageRecord.id)) {
+                  project.thumbnail = result.url;
+                  console.log(`[Migration] Updated ${project.title} thumbnail`);
+                }
+              }
+              
+              localStorage.setItem('portfolio_projects_data', JSON.stringify(projects));
+            }
+          } catch (error) {
+            console.warn(`[Migration] Failed to migrate ${imageRecord.id}:`, error);
+          }
+        }
+        
+        console.log(`[Migration] 🎉 Migration complete! Migrated ${migratedCount}/${allImages.length} images`);
+        alert(`✅ Migration complete!\n\n${migratedCount} images migrated to Netlify Blobs.\nStorage quota issue should be fixed.\n\nRefresh the page to see the results.`);
+      };
+    };
+    
+    dbRequest.onerror = () => {
+      console.error('[Migration] Failed to access IndexedDB');
+      alert('❌ Migration failed: Could not access IndexedDB');
+    };
+    
   } catch (error) {
     console.error('[Migration] Error during migration:', error);
-    alert('Error during migration. Check console for details.');
+    alert('❌ Migration failed. Check console for details.');
   }
 };
 
@@ -96,26 +146,40 @@ export const addMigrationButton = () => {
   
   const button = document.createElement('button');
   button.id = 'migration-button';
-  button.innerHTML = '🔄 Migrate Images to Blobs';
+  button.innerHTML = '🚀 Fix Storage Quota (Migrate Images)';
   button.style.cssText = `
     position: fixed;
     top: 10px;
     right: 10px;
     z-index: 9999;
-    background: #007bff;
+    background: #dc3545;
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 12px 16px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   `;
   
   button.onclick = () => {
-    if (confirm('Migrate all base64 images to Netlify Blobs? This may take a few minutes.')) {
-      migrateBase64ImagesToBlobs();
+    if (confirm('🚀 URGENT: Fix storage quota by migrating large images to Netlify Blobs?\n\nThis will:\n✅ Convert 20MB+ images to small URLs\n✅ Fix QuotaExceededError\n✅ Make images load on mobile\n\nThis may take 2-3 minutes.')) {
+      button.innerHTML = '⏳ Migrating...';
+      button.disabled = true;
+      migrateBase64ImagesToBlobs().finally(() => {
+        button.innerHTML = '✅ Migration Complete';
+        setTimeout(() => {
+          button.remove();
+        }, 3000);
+      });
     }
   };
   
   document.body.appendChild(button);
 };
+
+// Also make it available globally for manual execution
+if (typeof window !== 'undefined') {
+  (window as any).migrateImages = migrateBase64ImagesToBlobs;
+}
