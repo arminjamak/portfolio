@@ -20,12 +20,8 @@ export const handler = async (event: any) => {
       };
     }
 
-    // Get Netlify Blobs store with explicit config
-    const store = getStore({
-      name: 'portfolio-images',
-      siteID: process.env.NETLIFY_BLOBS_SITE_ID,
-      token: process.env.NETLIFY_BLOBS_TOKEN,
-    });
+    // Get Netlify Blobs store - Netlify automatically provides the config
+    const store = getStore('portfolio-images');
     
     // Convert base64 data URL to buffer
     const base64Data = imageData.split(',')[1];
@@ -38,8 +34,9 @@ export const handler = async (event: any) => {
       },
     });
     
-    // Generate the blob URL
-    const blobUrl = `${process.env.URL}/.netlify/blobs/get/portfolio-images/${imageId}`;
+    // Generate the blob URL using the site URL
+    const siteUrl = process.env.URL || 'https://armin.work';
+    const blobUrl = `${siteUrl}/.netlify/blobs/get/portfolio-images/${imageId}`;
     
     console.log(`[upload-image] Uploaded image: ${imageId} (${(buffer.length / 1024).toFixed(0)}KB)`);
 
