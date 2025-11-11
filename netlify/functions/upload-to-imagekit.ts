@@ -68,47 +68,12 @@ export default async (request: Request, context: Context) => {
     const fileExtension = mimeMatch ? mimeMatch[1] : 'jpg';
     console.log(`[upload-to-imagekit] Detected file type: ${fileExtension}`);
 
-    // Convert base64 to buffer for proper file upload
-    const base64Data = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
+    // ImageKit accepts base64 data directly, no need for buffer conversion
+    console.log(`[upload-to-imagekit] Sending base64 data directly to ImageKit`);
     
-    // Validate base64 data (more lenient)
-    if (!base64Data || base64Data.length < 20) {
-      console.log(`[upload-to-imagekit] Invalid or too short base64 data: ${base64Data.length} characters`);
-      return new Response(JSON.stringify({
-        success: false,
-        error: 'Invalid base64 data',
-        imageId,
-        originalUrl: '',
-        resizedUrl: '',
-        url: '',
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-    
-    let buffer;
-    try {
-      buffer = Buffer.from(base64Data, 'base64');
-      console.log(`[upload-to-imagekit] Buffer created successfully: ${buffer.length} bytes`);
-    } catch (error) {
-      console.error(`[upload-to-imagekit] Failed to create buffer from base64:`, error);
-      return new Response(JSON.stringify({
-        success: false,
-        error: 'Failed to process image data',
-        imageId,
-        originalUrl: '',
-        resizedUrl: '',
-        url: '',
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-    
-    // Create form data for ImageKit upload
+    // Create form data for ImageKit upload - send base64 string directly
     const formData = new FormData();
-    formData.append('file', new Blob([buffer], { type: `image/${fileExtension}` }), `${imageId}.${fileExtension}`);
+    formData.append('file', imageData); // Send the full data URL directly
     formData.append('fileName', `${imageId}.${fileExtension}`);
     formData.append('folder', '/portfolio');
     formData.append('useUniqueFileName', 'false');
