@@ -159,7 +159,7 @@ export function ContentEditor({
         // Try to upload to Cloudflare R2 immediately
         try {
           const imageId = `content-${blockId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          const response = await fetch('/.netlify/functions/upload-to-r2-real', {
+          const response = await fetch('/.netlify/functions/upload-to-imagekit', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -172,17 +172,17 @@ export function ContentEditor({
 
           if (response.ok) {
             const result = await response.json();
-            console.log(`[ContentEditor] ✅ Uploaded to Cloudflare R2: ${result.resizedUrl}`);
+            console.log(`[ContentEditor] ✅ Uploaded to ImageKit: ${result.resizedUrl}`);
             // Use the Cloudflare R2 resized URL instead of base64
             updateBlock(blockId, { content: result.resizedUrl });
           } else {
             const errorText = await response.text();
-            console.warn(`[ContentEditor] Failed to upload to Cloudflare R2: ${errorText}, using base64 fallback`);
+            console.warn(`[ContentEditor] Failed to upload to ImageKit: ${errorText}, using base64 fallback`);
             // Fallback to base64 if R2 fails
             updateBlock(blockId, { content: dataUrl });
           }
         } catch (error) {
-          console.warn(`[ContentEditor] Error uploading to Cloudflare R2, using base64 fallback:`, error);
+          console.warn(`[ContentEditor] Error uploading to ImageKit, using base64 fallback:`, error);
           // Fallback to base64 if R2 fails
           updateBlock(blockId, { content: dataUrl });
         }

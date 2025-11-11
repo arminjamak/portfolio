@@ -91,9 +91,9 @@ export function EditProjectModal({
           try {
             // Always generate a unique ID for new uploads
             const imageId = `project-thumbnail-${project?.id || 'new'}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            console.log(`[EditProjectModal] Attempting to upload ${imageId} to Cloudflare R2...`);
+            console.log(`[EditProjectModal] Attempting to upload ${imageId} to ImageKit...`);
             
-            const response = await fetch('/.netlify/functions/upload-to-r2-real', {
+            const response = await fetch('/.netlify/functions/upload-to-imagekit', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export function EditProjectModal({
             
             if (response.ok) {
               const result = await response.json();
-              console.log(`[EditProjectModal] ✅ Uploaded thumbnail to Cloudflare R2: ${result.resizedUrl}`);
+              console.log(`[EditProjectModal] ✅ Uploaded thumbnail to ImageKit: ${result.resizedUrl}`);
               // Use the Cloudflare R2 resized URL instead of base64
               setThumbnail(result.resizedUrl);
             } else {

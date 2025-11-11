@@ -1,0 +1,99 @@
+import type { Context } from '@netlify/functions';
+
+export default async (request: Request, context: Context) => {
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405 });
+  }
+
+  try {
+    const { imageId, imageData } = await request.json();
+    
+    if (!imageId || !imageData) {
+      return new Response('Missing imageId or imageData', { status: 400 });
+    }
+
+    console.log(`[upload-to-imagekit] Uploading ${imageId}...`);
+
+    // Check required environment variables
+    const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
+    const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
+    const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;
+    
+    if (!publicKey || !privateKey || !urlEndpoint) {
+      console.error('[upload-to-imagekit] Missing environment variables:', {
+        publicKey: !!publicKey,
+        privateKey: !!privateKey,
+        urlEndpoint: !!urlEndpoint
+      });
+      return new Response('Missing ImageKit credentials', { status: 500 });
+    }
+
+    // Convert base64 to buffer
+    const base64Data = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
+    const buffer = Buffer.from(base64Data, 'base64');
+    
+    console.log(`[upload-to-imagekit] Buffer size: ${buffer.length} bytes (${(buffer.length / 1024 / 1024).toFixed(1)}MB)`);
+
+    // Create form data for ImageKit upload
+    const formData = new FormData();
+    formData.append('file', new Blob([buffer]), `${imageId}.jpg`);
+    formData.append('fileName', `${imageId}.jpg`);
+    formData.append('folder', '/portfolio');
+    formData.append('useUniqueFileName', 'false');
+    
+    // Create basic auth header
+    const auth = Buffer.from(`${privateKey}:`).toString('base64');
+    
+    // Upload to ImageKit
+    const uploadUrl = 'https://upload.imagekit.io/api/v1/files/upload';
+    
+    console.log(`[upload-to-imagekit] Uploading to ImageKit...`);
+    
+    const imagekitResponse = await fetch(uploadUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+      },
+      body: formData,
+    });
+
+    if (!imagekitResponse.ok) {
+      const errorText = await imagekitResponse.text();
+      console.error(`[upload-to-imagekit] Upload failed (${imagekitResponse.status}):`, errorText);
+      return new Response(`ImageKit upload failed: ${errorText}`, { status: 500 });
+    }
+
+    const result = await imagekitResponse.json();
+    console.log(`[upload-to-imagekit] ✅ Successfully uploaded to ImageKit`);
+
+    // ImageKit provides automatic optimization through URL transformations
+    const originalUrl = result.url;
+    const optimizedUrl = `${urlEndpoint}/tr:w-1200,q-85,f-auto/${result.filePath}`;
+
+    console.log(`[upload-to-imagekit] Generated URLs:`);
+    console.log(`[upload-to-imagekit] - Original: ${originalUrl}`);
+    console.log(`[upload-to-imagekit] - Optimized: ${optimizedUrl}`);
+
+    return new Response(JSON.stringify({
+      success: true,
+      imageId,
+      originalUrl: originalUrl,
+      resizedUrl: optimizedUrl,
+      url: optimizedUrl, // Use optimized as default
+      imagekit_result: result
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    console.error('[upload-to-imagekit] Error:', error);
+    return new Response(JSON.stringify({
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error',
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+};

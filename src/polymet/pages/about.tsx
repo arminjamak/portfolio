@@ -62,9 +62,9 @@ export function About() {
         // Try to upload to Cloudflare R2 immediately
         try {
           const imageId = `about-profile-image-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          console.log(`[About] Attempting to upload ${imageId} to Cloudinary...`);
+          console.log(`[About] Attempting to upload ${imageId} to ImageKit...`);
           
-          const response = await fetch('/.netlify/functions/upload-to-cloudinary', {
+          const response = await fetch('/.netlify/functions/upload-to-imagekit', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export function About() {
           
           if (response.ok) {
             const result = await response.json();
-            console.log(`[About] ✅ Uploaded profile image to Cloudinary: ${result.resizedUrl}`);
+            console.log(`[About] ✅ Uploaded profile image to ImageKit: ${result.resizedUrl}`);
             // Use the Cloudflare R2 resized URL instead of base64
             setTempImageUrl(result.resizedUrl);
           } else {
