@@ -20,8 +20,12 @@ export const handler = async (event: any) => {
       };
     }
 
-    // Get Netlify Blobs store
-    const store = getStore('portfolio-images');
+    // Get Netlify Blobs store with explicit config
+    const store = getStore({
+      name: 'portfolio-images',
+      siteID: process.env.NETLIFY_BLOBS_SITE_ID,
+      token: process.env.NETLIFY_BLOBS_TOKEN,
+    });
     
     // Convert base64 data URL to buffer
     const base64Data = imageData.split(',')[1];
