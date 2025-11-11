@@ -14,3 +14,7 @@
 
 [functions]
   directory = "netlify/functions"
+
+# Enable Netlify Blobs
+[blobs]
+  enabled = true

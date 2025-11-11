@@ -26,25 +26,10 @@ export const handler = async (event: any) => {
       url: process.env.URL
     });
 
-    // Get Netlify Blobs store with manual configuration
-    // Extract site ID from URL (armin.work -> site ID should be available in context)
-    const siteId = event.headers['x-nf-site-id'] || process.env.NETLIFY_SITE_ID;
-    const token = process.env.NETLIFY_FUNCTIONS_TOKEN;
-    
-    console.log(`[upload-image] Site ID: ${siteId ? 'found' : 'missing'}`);
-    console.log(`[upload-image] Token: ${token ? 'found' : 'missing'}`);
-    
-    if (!siteId || !token) {
-      throw new Error(`Missing required config: siteId=${!!siteId}, token=${!!token}`);
-    }
-    
-    const store = getStore({
-      name: 'portfolio-images',
-      siteID: siteId,
-      token: token,
-    });
-    console.log(`[upload-image] Got store instance with manual config`);
-    
+    // Get Netlify Blobs store - try automatic configuration
+    console.log(`[upload-image] Getting Netlify Blobs store...`);
+    const store = getStore('portfolio-images');
+    console.log(`[upload-image] ✅ Got store instance`);
     
     // Convert base64 data URL to buffer
     const base64Data = imageData.split(',')[1];
