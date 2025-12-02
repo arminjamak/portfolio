@@ -291,7 +291,7 @@ export function ContentEditor({
                       fileInputRefs.current[block.id] = el;
                     }}
                     type="file"
-                    accept="image/*,video/mp4"
+                    accept="image/*,video/*,.mp4,.webm,.mov"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];

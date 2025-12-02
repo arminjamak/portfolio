@@ -206,7 +206,7 @@ export function EditProjectModal({
                         <input
                           id="file-upload"
                           type="file"
-                          accept="image/*,video/mp4"
+                          accept="image/*,video/*,.mp4,.webm,.mov"
                           onChange={handleImageUpload}
                           className="sr-only"
                           disabled={isUploading}
