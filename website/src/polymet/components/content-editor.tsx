@@ -291,7 +291,6 @@ export function ContentEditor({
                       fileInputRefs.current[block.id] = el;
                     }}
                     type="file"
-                    accept="*/*"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];

@@ -206,7 +206,6 @@ export function EditProjectModal({
                         <input
                           id="file-upload"
                           type="file"
-                          accept="*/*"
                           onChange={handleImageUpload}
                           className="sr-only"
                           disabled={isUploading}

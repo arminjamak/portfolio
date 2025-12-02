@@ -2,7 +2,6 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode,
 } from "react";
 import { syncToGitHub, exportAllData } from "@/polymet/data/sync-service";
@@ -18,23 +17,23 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 const ADMIN_EMAIL = "jamakarmin@gmail.com";
 const ADMIN_PASSWORD = "Carbovaris2011";
-const ADMIN_STORAGE_KEY = "portfolio_admin_auth";
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    // Check if admin is logged in from localStorage
-    const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
-    if (stored === "true") {
-      setIsAdmin(true);
-    }
-  }, []);
+  // Removed localStorage persistence - admin must login after each page refresh/deploy
+  // useEffect(() => {
+  //   const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
+  //   if (stored === "true") {
+  //     setIsAdmin(true);
+  //   }
+  // }, []);
 
   const login = (email: string, password: string): boolean => {
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       setIsAdmin(true);
-      localStorage.setItem(ADMIN_STORAGE_KEY, "true");
+      // Don't persist to localStorage - session only
+      // localStorage.setItem(ADMIN_STORAGE_KEY, "true");
       // Add migration button when admin logs in
       setTimeout(() => addMigrationButton(), 100);
       return true;
@@ -58,7 +57,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }
     
     setIsAdmin(false);
-    localStorage.removeItem(ADMIN_STORAGE_KEY);
+    // No need to remove from localStorage since we don't store it anymore
+    // localStorage.removeItem(ADMIN_STORAGE_KEY);
   };
 
   return (
