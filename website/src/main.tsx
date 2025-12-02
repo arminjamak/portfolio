@@ -4,6 +4,9 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
+// Force cache break - MP4 upload fix
+import "./index.css";
+
 // Make React and ReactDOM globally available immediately (not in useEffect)
 window.React = React;
 window.ReactDOM = ReactDOM;
