@@ -17,5 +17,15 @@ export default defineConfig({
       '@lib': path.resolve(__dirname, './src/lib'),
       '(components)': path.resolve(__dirname, './src/(components)'),
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        // Force new file names with timestamp
+        entryFileNames: `assets/[name]-${Date.now()}.js`,
+        chunkFileNames: `assets/[name]-${Date.now()}.js`,
+        assetFileNames: `assets/[name]-${Date.now()}.[ext]`
+      }
+    }
   }
 })
