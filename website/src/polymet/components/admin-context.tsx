@@ -24,7 +24,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   // Clear any old localStorage auth on mount - force logout on every page load
   useEffect(() => {
+    console.log('[AdminProvider] Clearing localStorage and forcing logout on mount');
     localStorage.removeItem("portfolio_admin_auth");
+    localStorage.clear(); // Clear ALL localStorage to be absolutely sure
   }, []);
 
   const login = (email: string, password: string): boolean => {
