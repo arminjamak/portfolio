@@ -1,6 +1,83 @@
 {
-  "timestamp": "2025-12-02T12:32:17.226Z",
-  "projects": [],
+  "timestamp": "2025-12-02T13:21:15.867Z",
+  "projects": [
+    {
+      "id": "qatar-airways",
+      "title": "Qatar Airways",
+      "category": "Airline Industry",
+      "thumbnail": "https://ik.imagekit.io/bvord1udre/tr:w-1200,q-85,f-auto/portfolio/placeholder.jpg",
+      "images": [
+        ""
+      ],
+      "description": "New project - add description",
+      "year": "2025",
+      "client": "TBD",
+      "role": "Product Designer",
+      "history": [
+        {
+          "phase": "Project Overview",
+          "content": "Add project details here"
+        }
+      ]
+    },
+    {
+      "id": "mytaverse",
+      "title": "Mytaverse",
+      "category": "Metaverse Platform",
+      "thumbnail": "https://ik.imagekit.io/bvord1udre/tr:w-1200,q-85,f-auto/portfolio/test-real-simple_nM7o7OzQWB.jpg",
+      "images": [
+        ""
+      ],
+      "description": "New project - add description",
+      "year": "2025",
+      "client": "TBD",
+      "role": "Product Designer",
+      "history": [
+        {
+          "phase": "Project Overview",
+          "content": "Add project details here"
+        }
+      ]
+    },
+    {
+      "id": "colossyan",
+      "title": "Colossyan",
+      "category": "AI Avatar Platform",
+      "thumbnail": "https://ik.imagekit.io/bvord1udre/tr:w-1200,q-85,f-auto/portfolio/project-thumbnail-colossyan-1762888942400-69d398y77.gif",
+      "images": [
+        ""
+      ],
+      "description": "New project - add description",
+      "year": "2025",
+      "client": "TBD",
+      "role": "Product Designer",
+      "history": [
+        {
+          "phase": "Project Overview",
+          "content": "Add project details here"
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "title": "Test",
+      "category": "testing",
+      "thumbnail": "https://armin.work/.netlify/functions/get-image?id=image-1764681675869-7v8vtrj4w",
+      "images": [
+        "https://armin.work/.netlify/functions/get-image?id=image-1764681677782-jhrg9inqa"
+      ],
+      "description": "New project - add description",
+      "year": "2025",
+      "client": "TBD",
+      "role": "Product Designer",
+      "history": [
+        {
+          "phase": "Project Overview",
+          "content": "Add project details here"
+        }
+      ]
+    }
+  ],
   "about": {
     "content": [
       {
@@ -62,5 +139,8 @@
       ]
     }
   },
-  "home": {}
+  "home": {
+    "title": "Lead Designer",
+    "subtitle": "Focusing on generative and conversational AI."
+  }
 }
