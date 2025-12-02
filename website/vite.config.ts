@@ -21,10 +21,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // Force new file names with timestamp
-        entryFileNames: `assets/[name]-${Date.now()}.js`,
-        chunkFileNames: `assets/[name]-${Date.now()}.js`,
-        assetFileNames: `assets/[name]-${Date.now()}.[ext]`
+        // Force new file names with hash
+        entryFileNames: `assets/[name]-[hash].js`,
+        chunkFileNames: `assets/[name]-[hash].js`,
+        assetFileNames: `assets/[name]-[hash].[ext]`
       }
     }
   }
