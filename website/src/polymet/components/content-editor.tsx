@@ -292,6 +292,7 @@ export function ContentEditor({
                     }}
                     type="file"
                     className="hidden"
+                    data-testid="image-upload-input"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) handleImageUpload(block.id, file);
