@@ -86,7 +86,11 @@ export async function uploadToImageKitDirect(
 
     // Generate optimized URL using ImageKit transformations
     const cleanFilePath = uploadResult.filePath.startsWith('/') ? uploadResult.filePath.slice(1) : uploadResult.filePath;
-    const optimizedUrl = `${authParams.urlEndpoint}/tr:w-1200,q-85,f-auto/${cleanFilePath}`;
+    // Don't apply image transformations to videos
+    const isVideo = file.type.startsWith('video/');
+    const optimizedUrl = isVideo 
+      ? `${authParams.urlEndpoint}/${cleanFilePath}`
+      : `${authParams.urlEndpoint}/tr:w-1200,q-85,f-auto/${cleanFilePath}`;
 
     return {
       success: true,
@@ -184,7 +188,11 @@ export async function uploadToImageKitDirectFormData(
 
     // Generate optimized URL
     const cleanFilePath = result.filePath.startsWith('/') ? result.filePath.slice(1) : result.filePath;
-    const optimizedUrl = `${authParams.urlEndpoint}/tr:w-1200,q-85,f-auto/${cleanFilePath}`;
+    // Don't apply image transformations to videos
+    const isVideo = file.type.startsWith('video/');
+    const optimizedUrl = isVideo 
+      ? `${authParams.urlEndpoint}/${cleanFilePath}`
+      : `${authParams.urlEndpoint}/tr:w-1200,q-85,f-auto/${cleanFilePath}`;
 
     return {
       success: true,
@@ -215,6 +223,13 @@ function getFileExtension(file: File): string {
     case 'image/gif': return 'gif';
     case 'image/webp': return 'webp';
     case 'image/svg+xml': return 'svg';
-    default: return 'jpg';
+    case 'video/mp4': return 'mp4';
+    case 'video/webm': return 'webm';
+    case 'video/quicktime': return 'mov';
+    default: {
+      // Try to extract extension from filename
+      const parts = file.name.split('.');
+      return parts.length > 1 ? parts[parts.length - 1] : 'jpg';
+    }
   }
 }

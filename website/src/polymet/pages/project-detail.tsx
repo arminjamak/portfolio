@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { AnimatedLogo } from "@/polymet/components/animated-logo";
 import { ArrowLeftIcon, EditIcon, SaveIcon, XIcon } from "lucide-react";
 import { useAdmin } from "@/polymet/components/admin-context";
+import { isVideoUrl } from "@/polymet/utils/media-utils";
 import {
   ContentEditor,
   ContentBlock,
@@ -661,11 +662,22 @@ export function ProjectDetail() {
                   return (
                     <div key={block.id} className="space-y-2">
                       <div className="rounded-lg overflow-hidden border border-border">
-                        <img
-                          src={block.content}
-                          alt={block.caption || "Project image"}
-                          className="w-full h-auto"
-                        />
+                        {isVideoUrl(block.content) ? (
+                          <video
+                            src={block.content}
+                            className="w-full h-auto"
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                          />
+                        ) : (
+                          <img
+                            src={block.content}
+                            alt={block.caption || "Project image"}
+                            className="w-full h-auto"
+                          />
+                        )}
                       </div>
                       {block.caption && (
                         <p className="text-sm text-muted-foreground text-left">

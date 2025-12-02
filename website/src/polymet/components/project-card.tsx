@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Project } from "@/polymet/data/projects-data";
 import { Button } from "@/components/ui/button";
 import { EditIcon } from "lucide-react";
+import { isVideoUrl } from "@/polymet/utils/media-utils";
 
 interface ProjectCardProps {
   project: Project;
@@ -23,11 +24,22 @@ export function ProjectCard({ project, isAdmin, onEdit }: ProjectCardProps) {
     >
       <div className="aspect-[4/3] overflow-hidden relative">
         {project.thumbnail ? (
-          <img
-            src={project.thumbnail}
-            alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          isVideoUrl(project.thumbnail) ? (
+            <video
+              src={project.thumbnail}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : (
+            <img
+              src={project.thumbnail}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          )
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
             <div className="text-center text-muted-foreground">

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Project } from "@/polymet/data/projects-data";
 import { SaveIcon, TrashIcon, UploadIcon, LoaderIcon } from "lucide-react";
 import { uploadToImageKitDirectFormData } from "@/polymet/utils/imagekit-direct-upload";
+import { isVideoUrl } from "@/polymet/utils/media-utils";
 
 interface EditProjectModalProps {
   open: boolean;
@@ -156,17 +157,28 @@ export function EditProjectModal({
               <div className="space-y-2">
                 <Label htmlFor="thumbnail">Cover Image</Label>
                 <p className="text-xs text-muted-foreground">
-                  You can upload files up to 25MB (including GIFs) directly to ImageKit. For even
+                  You can upload files up to 25MB (including GIFs and MP4 videos) directly to ImageKit. For even
                   larger files, use an external URL (Squarespace CDN, Framer, etc.).
                 </p>
                 <div className="space-y-3">
                   {thumbnail && (
                     <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden border border-border">
-                      <img
-                        src={thumbnail}
-                        alt="Cover preview"
-                        className="w-full h-full object-cover"
-                      />
+                      {isVideoUrl(thumbnail) ? (
+                        <video
+                          src={thumbnail}
+                          className="w-full h-full object-cover"
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                        />
+                      ) : (
+                        <img
+                          src={thumbnail}
+                          alt="Cover preview"
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                     </div>
                   )}
                   <div className="flex gap-2">
@@ -194,7 +206,7 @@ export function EditProjectModal({
                         <input
                           id="file-upload"
                           type="file"
-                          accept="image/*"
+                          accept="image/*,video/mp4"
                           onChange={handleImageUpload}
                           className="sr-only"
                           disabled={isUploading}

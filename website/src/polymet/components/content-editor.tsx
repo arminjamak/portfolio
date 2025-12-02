@@ -21,6 +21,7 @@ import {
   SpaceIcon,
 } from "lucide-react";
 import { uploadToImageKitDirectFormData } from "@/polymet/utils/imagekit-direct-upload";
+import { isVideoUrl } from "@/polymet/utils/media-utils";
 
 export interface ContentBlock {
   id: string;
@@ -271,7 +272,7 @@ export function ContentEditor({
             ) : block.type === "image" ? (
               <div className="space-y-2">
                 <p className="text-xs text-muted-foreground">
-                  You can upload files up to 25MB (including GIFs) directly to ImageKit. For even
+                  You can upload files up to 25MB (including GIFs and MP4 videos) directly to ImageKit. For even
                   larger files, use an external URL (Squarespace CDN, Framer, etc.).
                 </p>
                 <div className="flex gap-2">
@@ -290,7 +291,7 @@ export function ContentEditor({
                       fileInputRefs.current[block.id] = el;
                     }}
                     type="file"
-                    accept="image/*"
+                    accept="image/*,video/mp4"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
@@ -320,14 +321,25 @@ export function ContentEditor({
 
                 {block.content && (
                   <div className="border border-border rounded overflow-hidden">
-                    <img
-                      src={block.content}
-                      alt="Preview"
-                      className="w-full h-48 object-cover"
-                      onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                      }}
-                    />
+                    {isVideoUrl(block.content) ? (
+                      <video
+                        src={block.content}
+                        className="w-full h-48 object-cover"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={block.content}
+                        alt="Preview"
+                        className="w-full h-48 object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                    )}
                   </div>
                 )}
                 
