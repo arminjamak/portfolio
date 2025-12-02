@@ -21,13 +21,10 @@ const ADMIN_PASSWORD = "Carbovaris2011";
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Removed localStorage persistence - admin must login after each page refresh/deploy
-  // useEffect(() => {
-  //   const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
-  //   if (stored === "true") {
-  //     setIsAdmin(true);
-  //   }
-  // }, []);
+  // Clear any old localStorage auth on mount - force logout on every page load
+  useState(() => {
+    localStorage.removeItem("portfolio_admin_auth");
+  });
 
   const login = (email: string, password: string): boolean => {
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
