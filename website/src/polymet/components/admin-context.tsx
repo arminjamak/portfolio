@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
   ReactNode,
 } from "react";
 import { syncToGitHub, exportAllData } from "@/polymet/data/sync-service";
@@ -22,9 +23,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   // Clear any old localStorage auth on mount - force logout on every page load
-  useState(() => {
+  useEffect(() => {
     localStorage.removeItem("portfolio_admin_auth");
-  });
+  }, []);
 
   const login = (email: string, password: string): boolean => {
     if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
