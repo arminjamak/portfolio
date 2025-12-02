@@ -1,0 +1,66 @@
+{
+  "timestamp": "2025-11-11T19:02:54.874Z",
+  "projects": [],
+  "about": {
+    "content": [
+      {
+        "id": "1",
+        "type": "h1",
+        "content": "About Me"
+      },
+      {
+        "id": "2",
+        "type": "body",
+        "content": "Product Designer based in San Francisco"
+      },
+      {
+        "id": "3",
+        "type": "body",
+        "content": "I'm Armin Jamak, a product designer with over 8 years of experience creating digital products that people love to use. My approach combines strategic thinking with meticulous attention to detail, always keeping the user at the center of every decision."
+      },
+      {
+        "id": "4",
+        "type": "body",
+        "content": "Throughout my career, I've had the privilege of working with startups and established companies across various industries—from fintech and healthcare to education and e-commerce. I believe great design is invisible; it solves problems so elegantly that users don't have to think about it."
+      },
+      {
+        "id": "5",
+        "type": "body",
+        "content": "My design process is rooted in research and iteration. I start by deeply understanding the problem space through user interviews, data analysis, and competitive research. Then I explore multiple solutions through sketching and prototyping, testing early and often to validate assumptions and refine the experience."
+      },
+      {
+        "id": "6",
+        "type": "body",
+        "content": "When I'm not designing, you can find me exploring the city's coffee shops, reading about psychology and behavioral economics, or experimenting with generative art and creative coding."
+      }
+    ],
+    "profileImage": "https://ik.imagekit.io/bvord1udre/tr:w-1200,q-85,f-auto/portfolio/about-profile-image-1762887700970-vhs1jh6w7",
+    "skills": {
+      "design": [
+        "User Research",
+        "Information Architecture",
+        "Interaction Design",
+        "Visual Design",
+        "Prototyping",
+        "Design Systems"
+      ],
+      "tools": [
+        "Figma",
+        "Adobe Creative Suite",
+        "Sketch",
+        "Principle",
+        "Framer",
+        "Miro"
+      ],
+      "development": [
+        "HTML & CSS",
+        "JavaScript",
+        "React",
+        "Tailwind CSS",
+        "Git",
+        "Responsive Design"
+      ]
+    }
+  },
+  "home": {}
+}
